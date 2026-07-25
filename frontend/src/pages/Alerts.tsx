@@ -1,9 +1,4 @@
-const Alerts = () => {
-  return (
-    <div className="alerts">
-      Alerts works
-    </div>
-  );
-};
+export default function Alerts() {
+  return <h1>Alerts</h1>;
+}
 
-export default Alerts;

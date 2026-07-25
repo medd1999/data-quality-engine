@@ -1,9 +1,4 @@
-const Datasets = () => {
-  return (
-    <div className="datasets">
-      Datasets works
-    </div>
-  );
-};
+export default function Datasets() {
+  return <h1>Datasets</h1>;
+}
 
-export default Datasets;

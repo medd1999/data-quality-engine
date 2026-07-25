@@ -1,9 +1,3 @@
-const RunHistory = () => {
-  return (
-    <div className="run-history">
-      Run History works
-    </div>
-  );
-};
-
-export default RunHistory;
+export default function RunHistory() {
+  return <h1>Run History</h1>;
+}
