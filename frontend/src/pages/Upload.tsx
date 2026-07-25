@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./Upload.css";
 
 export default function Upload() {
   const [file, setFile] = useState<File | null>(null);
@@ -33,7 +34,7 @@ export default function Upload() {
 
   return (
     <div className="upload-container">
-      <h2>Upload Dataset</h2>
+      <h2 className="upload-title">Upload Dataset</h2>
 
       <div className="upload-card">
         <label>Dataset Name</label>
@@ -43,7 +44,7 @@ export default function Upload() {
           value={datasetName}
           onChange={(e) => setDatasetName(e.target.value)}
         />
-
+        <br></br><br></br>
         <label>File (CSV or JSON)</label>
         <input
           type="file"

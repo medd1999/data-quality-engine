@@ -1,6 +1,6 @@
 .sidebar {
   width: 240px;
-  background: #1e1e2f;
+  background: #040476;
   color: white;
   display: flex;
   flex-direction: column;
@@ -35,11 +35,11 @@
 }
 
 .nav-item:hover {
-  background: #2a2a42;
+  background: #0606ee;
   color: white;
 }
 
 .nav-item.active {
-  background: #3b3b5c;
+  background: #010139;
   color: white;
 }

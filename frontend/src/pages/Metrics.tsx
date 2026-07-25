@@ -1,4 +1,6 @@
+import "./Metrics.css";
+
 export default function Metrics() {
-  return <h1>Metrics</h1>;
+  return <h1 className="metrics-title">Metrics</h1>;
 }
 

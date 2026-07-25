@@ -1,3 +1,5 @@
+import "./RunHistory.css";
+
 export default function RunHistory() {
-  return <h1>Run History</h1>;
+  return <h1 className="run-history-title">Run History</h1>;
 }
