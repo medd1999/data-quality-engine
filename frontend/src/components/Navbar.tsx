@@ -5,7 +5,7 @@ export default function Navbar() {
   return (
     <header className="navbar">
       <div className="navbar-left">
-        <h3>Dashboard</h3>
+        <h3 className="navbar-title">Dashboard</h3>
       </div>
 
       <div className="navbar-right">

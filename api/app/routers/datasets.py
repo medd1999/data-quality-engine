@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, Form
+from fastapi import APIRouter, UploadFile, Form, HTTPException
 from ..db import SessionLocal
 from ..s3 import s3, S3_BUCKET
 
@@ -12,16 +12,24 @@ async def upload_dataset(
     db = SessionLocal()
 
     # Upload file to S3 (MinIO)
-    s3.upload_fileobj(file.file, S3_BUCKET, f"{dataset_name}/{file.filename}")
+    try:
+        object_key = f"{dataset_name}/{file.filename}"
+        s3.upload_fileobj(file.file, S3_BUCKET, object_key)
 
-    # Insert dataset metadata into Postgres
-    db.execute(
-        """
-        INSERT INTO datasets (name, file_name)
-        VALUES (:name, :file_name)
-        """,
-        {"name": dataset_name, "file_name": file.filename}
-    )
-    db.commit()
+        # Insert dataset metadata into Postgres
+        db.execute(
+            """
+            INSERT INTO datasets (name, file_name, object_key)
+            VALUES (:name, :file_name, :object_key)
+            """,
+            {"name": dataset_name,
+             "file_name": file.filename,
+             "object_key": object_key}
+        )
+        db.commit()
 
-    return {"message": "Dataset uploaded", "dataset": dataset_name}
+        return {"message": "Your dataset has successfully uploaded!", "dataset": dataset_name}
+
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))

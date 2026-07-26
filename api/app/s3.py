@@ -2,10 +2,10 @@ import boto3
 import os
 from botocore.exceptions import ClientError
 
-S3_ENDPOINT = os.getenv("S3_ENDPOINT")
+S3_ENDPOINT   = os.getenv("S3_ENDPOINT")
 S3_ACCESS_KEY = os.getenv("S3_ACCESS_KEY")
 S3_SECRET_KEY = os.getenv("S3_SECRET_KEY")
-S3_BUCKET = os.getenv("S3_BUCKET")
+S3_BUCKET     = os.getenv("S3_BUCKET")
 
 s3 = boto3.client(
     "s3",

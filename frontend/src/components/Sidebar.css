@@ -13,11 +13,13 @@
 
 .sidebar-header h2 {
   margin: 0;
+  font-family: "Inter", 'Times New Roman', Times, serif;
   font-size: 22px;
   font-weight: 600;
 }
 
 .sidebar-nav {
+  font-family: "Inter", 'Times New Roman', Times, serif;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -40,6 +42,6 @@
 }
 
 .nav-item.active {
-  background: #010139;
+  background: #3b3b5c;
   color: white;
 }
