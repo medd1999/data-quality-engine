@@ -21,13 +21,21 @@ export default function Upload() {
         body: formData,
       });
 
-      if (!res.ok) throw new Error("Upload failed");
+      console.log("STATUS:", res.status);
+
+      const raw = await res.text();
+      console.log("RAW RESPONSE:", raw);
+
+      if (!res.ok) {
+        throw new Error("Upload failed");
+      }
 
       setStatus("success");
       setFile(null);
       setDatasetName("");
+
     } catch (err) {
-      console.error(err);
+      console.error("UPLOAD ERROR:", err);
       setStatus("error");
     }
   }
