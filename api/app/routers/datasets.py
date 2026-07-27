@@ -7,6 +7,7 @@ router = APIRouter()
 
 @router.post("/datasets")
 async def upload_dataset(dataset_name: str = Form(...), file: UploadFile = Form(...)):
+    print("UPLOAD ENDPOINT HIT")
     db = SessionLocal()
 
     # Upload file to S3 (MinIO)

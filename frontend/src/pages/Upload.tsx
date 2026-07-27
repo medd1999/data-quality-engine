@@ -22,6 +22,10 @@ export default function Upload() {
       });
 
       console.log("STATUS:", res.status);
+      console.log("HEADERS:", res.headers);
+      console.log("CONTENT-TYPE:", res.headers.get("content-type"));
+      console.log("CONTENT-LENGTH:", res.headers.get("content-length"));
+      console.log("ACCESS-CONTROL:", res.headers.get("access-control-allow-origin"));
 
       const raw = await res.text();
       console.log("RAW RESPONSE:", raw);
