@@ -265,4 +265,5 @@ SentinelDQ is built for engineers who need transparent, automated, and scalable 
 
 - `docker compose build service_name` - build service container
 - `docker compose up service_name` - activate service container
+- `docker compose logs api` - show api (backend) logs
 - `npm run dev` - run application (from frontend)
