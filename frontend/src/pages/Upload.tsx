@@ -15,6 +15,8 @@ export default function Upload() {
     formData.append("file", file);
     formData.append("dataset_name", datasetName);
 
+    console.log("CALLING:", `${import.meta.env.VITE_API_URL}/datasets`);
+
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/datasets`, {
         method: "POST",
@@ -26,6 +28,7 @@ export default function Upload() {
       console.log("CONTENT-TYPE:", res.headers.get("content-type"));
       console.log("CONTENT-LENGTH:", res.headers.get("content-length"));
       console.log("ACCESS-CONTROL:", res.headers.get("access-control-allow-origin"));
+
 
       const raw = await res.text();
       console.log("RAW RESPONSE:", raw);
