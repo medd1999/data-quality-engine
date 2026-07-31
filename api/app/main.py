@@ -1,7 +1,9 @@
 from fastapi import FastAPI
-from .routers import datasets
+from app.routers import datasets
 from app.s3 import S3_BUCKET, ensure_bucket_exists
 from fastapi.middleware.cors import CORSMiddleware
+
+print("MAIN.PY STARTING", flush=True)
 
 app = FastAPI()
 
@@ -13,4 +15,5 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+print("INCLUDING ROUTER", flush=True)
 app.include_router(datasets.router)

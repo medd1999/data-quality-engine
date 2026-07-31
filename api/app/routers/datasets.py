@@ -1,3 +1,4 @@
+from sqlalchemy import text
 from fastapi import APIRouter, UploadFile, Form, HTTPException
 from ..db import SessionLocal
 from ..s3 import s3, S3_BUCKET
@@ -17,10 +18,10 @@ async def upload_dataset(dataset_name: str = Form(...), file: UploadFile = Form(
 
         # Insert dataset metadata into Postgres
         db.execute(
-            """
+            text("""
             INSERT INTO datasets (name, file_name, object_key)
             VALUES (:name, :file_name, :object_key)
-            """,
+            """),
             {
                 "name": dataset_name,
                 "file_name": file.filename,
