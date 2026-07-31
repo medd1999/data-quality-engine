@@ -268,3 +268,7 @@ SentinelDQ is built for engineers who need transparent, automated, and scalable 
 - `docker compose logs api` - show api (backend) logs
 - `docker exec -it <container-name> sh` - bash into docker container
 - `npm run dev` - run application (from frontend)
+- `curl -X POST http://localhost:8000/datasets \`
+  `-F "dataset_name=test_upload" \`
+  `-F "file=@/absolute/path/to/your/dataset.csv"` - test endpoint hit for dataset uplaod
+
