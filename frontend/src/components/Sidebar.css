@@ -30,7 +30,7 @@
   align-items: center;
   gap: 12px;
   padding: 10px 12px;
-  border-radius: 6px;
+  border-radius: 12px;
   color: #c7c7d9;
   text-decoration: none;
   transition: background 0.2s ease, color 0.2s ease;
@@ -39,6 +39,7 @@
 .nav-item:hover {
   background: #0606ee;
   color: white;
+  border-radius: 12px;
 }
 
 .nav-item.active {

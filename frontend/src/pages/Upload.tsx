@@ -52,7 +52,7 @@ export default function Upload() {
       <h2 className="upload-title">Upload Dataset</h2>
 
       <div className="upload-card">
-        <label>Dataset Name</label>
+        <label>Dataset Name </label>
         <input
           type="text"
           placeholder="e.g. customer_churn"
@@ -60,13 +60,14 @@ export default function Upload() {
           onChange={(e) => setDatasetName(e.target.value)}
         />
         <br></br><br></br>
-        <label>File (CSV or JSON)</label>
+        <label className="upload-label">File (CSV or JSON) </label>
+        <br></br>
         <input
           type="file"
           accept=".csv,.json"
           onChange={(e) => setFile(e.target.files?.[0] || null)}
         />
-
+        
         <button
           disabled={!file || !datasetName || status === "uploading"}
           onClick={handleUpload}
