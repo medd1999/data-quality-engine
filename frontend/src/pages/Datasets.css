@@ -5,10 +5,12 @@
 }
 
 .datasets-page {
+  font-family: "Inter", 'Times New Roman', Times, serif;
   padding: 24px;
 }
 
 .datasets-loading {
+  font-family: "Inter", 'Times New Roman', Times, serif;
   padding: 24px;
   font-size: 18px;
 }
