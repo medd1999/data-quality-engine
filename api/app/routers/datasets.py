@@ -44,7 +44,7 @@ async def upload_dataset(dataset_name: str = Form(...), file: UploadFile = Form(
 def list_datasets():
     db = SessionLocal()
 
-    rows = db.execute("""
+    rows = db.execute(text("""
         SELECT 
             name, 
             id,
@@ -53,7 +53,6 @@ def list_datasets():
             created_at
         FROM datasets
         ORDER BY created_at DESC
-        """
-    )
+        """)).fetchall()
 
-    return [dict(row) for row in rows]
+    return [dict(row._mapping) for row in rows]
