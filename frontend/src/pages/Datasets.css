@@ -3,3 +3,12 @@
   font-size: 50px;
   font-weight: 600;
 }
+
+.datasets-page {
+  padding: 24px;
+}
+
+.datasets-loading {
+  padding: 24px;
+  font-size: 18px;
+}

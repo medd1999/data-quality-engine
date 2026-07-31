@@ -1,0 +1,24 @@
+.dataset-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dataset-table th,
+.dataset-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e2e2e2;
+  text-align: left;
+}
+
+.dataset-actions button {
+  margin-right: 12px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #0077ff;
+  font-weight: 500;
+}
+
+.dataset-actions button:hover {
+  text-decoration: underline;
+}
