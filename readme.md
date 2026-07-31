@@ -270,5 +270,6 @@ SentinelDQ is built for engineers who need transparent, automated, and scalable 
 - `npm run dev` - run application (from frontend)
 - `curl -X POST http://localhost:8000/datasets \`
   `-F "dataset_name=test_upload" \`
-  `-F "file=@/absolute/path/to/your/dataset.csv"` - test endpoint hit for dataset uplaod
+  `-F "file=@/absolute/path/to/your/dataset.csv"` - test endpoint hit for dataset upload
+- `docker exec -it sentineldq_db psql -U postgres -d sentineldq` - run SQL inside Postgres container
 
