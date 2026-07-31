@@ -277,9 +277,9 @@ SentinelDQ is built for engineers who need transparent, automated, and scalable 
 
 # Checklist
 
-- Backend/FastAPI
-- Docker/Compose
-- Postgres
-- MinIO
-- E2E Pipeline
+- Backend/FastAPI √
+- Docker/Compose √
+- Postgres √
+- MinIO √
+- E2E Pipeline √
 
