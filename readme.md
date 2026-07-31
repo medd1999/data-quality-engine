@@ -273,3 +273,13 @@ SentinelDQ is built for engineers who need transparent, automated, and scalable 
   `-F "file=@/absolute/path/to/your/dataset.csv"` - test endpoint hit for dataset upload
 - `docker exec -it sentineldq_db psql -U postgres -d sentineldq` - run SQL inside Postgres container
 
+
+
+# Checklist
+
+- Backend/FastAPI
+- Docker/Compose
+- Postgres
+- MinIO
+- E2E Pipeline
+
