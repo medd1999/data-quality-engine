@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Sidebar from "./components/Sidebar";
-import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar/Sidebar";
+import Navbar from "./components/Navbar/Navbar";
 
-import Datasets from "./pages/Datasets";
-import Upload from "./pages/Upload";
-import RunHistory from "./pages/RunHistory";
-import Metrics from "./pages/Metrics";
-import Alerts from "./pages/Alerts";
+import Datasets from "./pages/Datasets/Datasets";
+import Upload from "./pages/Upload/Upload";
+import RunHistory from "./pages/RunHistory/RunHistory";
+import Metrics from "./pages/Metrics/Metrics";
+import Alerts from "./pages/Alerts/Alerts";
 
 export default function App() {
   return (

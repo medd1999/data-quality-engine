@@ -1,6 +1,6 @@
 import "./Datasets.css";
-import { useDatasets } from "../hooks/useDatasets";
-import DatasetsTable from "../components/DatasetsTable";
+import { useDatasets } from "../../hooks/useDatasets";
+import DatasetsTable from "../../components/DatasetsTable/DatasetsTable";
 
 export default function Datasets() {
   const { datasets, loading } = useDatasets();
