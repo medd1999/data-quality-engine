@@ -1,0 +1,15 @@
+.details-page {
+  padding: 24px;
+}
+
+.details-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.details-loading,
+.details-error {
+  padding: 24px;
+  font-size: 18px;
+}

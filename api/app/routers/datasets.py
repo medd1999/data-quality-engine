@@ -56,3 +56,27 @@ def list_datasets():
         """)).fetchall()
 
     return [dict(row._mapping) for row in rows]
+
+
+@router.get("/datasets/{dataset_id}")
+def get_dataset(dataset_id: int):
+    db = SessionLocal()
+
+    row = db.execute(
+        text("""
+            SELECT 
+                id,
+                name,
+                file_name,
+                object_key,
+                created_at
+            FROM datasets
+            WHERE id = :id
+        """),
+        {"id": dataset_id},
+    ).fetchone()
+
+    if not row:
+        raise HTTPException(status_code=404, detail="Dataset not found")
+
+    return dict(row._mapping)
