@@ -20,7 +20,7 @@ export default function DatasetTable({ datasets }: { datasets: Dataset[] }) {
         <tr>
           <th>Name</th>
           <th>File</th>
-          <th>Uploaded</th>
+          <th>Timestamp</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -36,11 +36,7 @@ export default function DatasetTable({ datasets }: { datasets: Dataset[] }) {
                 Download
               </button>
 
-              <button
-                onClick={() =>
-                  window.location.href = `/datasets/${ds.id}`
-                }
-              >
+              <button onClick={() => window.location.href = `/datasets/${ds.id}`}>
                 Details
               </button>
             </td>
