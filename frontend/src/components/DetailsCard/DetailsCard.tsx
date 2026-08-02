@@ -1,5 +1,4 @@
 import "./DetailsCard.css";
-// import DownloadButton from "../DownloadButton/DownloadButton";
 
 export default function DetailsCard({ dataset }) {
     return (
@@ -24,8 +23,6 @@ export default function DetailsCard({ dataset }) {
                 <span>{dataset.object_key}</span>
             </div>
             <br />
-
-            {/* <DownloadButton objectKey={dataset.object_key} label="Download Dataset" /> */}
         </div>
     );
 }
