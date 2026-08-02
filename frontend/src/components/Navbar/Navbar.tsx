@@ -10,7 +10,7 @@ export default function Navbar({onSearch}: {onSearch: (query: string) => void}) 
 
       <div className="navbar-center">
         <div className="search-bar">
-          <Search size={18} />
+          <Search size={20} />
           <input
             type="text"
             placeholder="Search datasets here..."

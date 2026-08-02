@@ -14,17 +14,19 @@
   justify-content: center;
 }
 
-.navbar-search {
+.search-bar {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #f5f5f5;
+  background: #f0f0f0;
   padding: 4px 8px;
+  border: 2px solid rgb(7, 7, 178);
   border-radius: 6px;
   width: 300px;
 }
 
-.navbar-search input {
+.search-bar input {
+  color: black;
   border: none;
   background: transparent;
   outline: none;
