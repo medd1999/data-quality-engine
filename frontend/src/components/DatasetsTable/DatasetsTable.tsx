@@ -8,7 +8,7 @@ interface Dataset {
   created_at: string;
 }
 
-export default function DatasetTable({ datasets }: { datasets: Dataset[] }) {
+export default function DatasetsTable({ datasets }: { datasets: Dataset[] }) {
   function downloadDataset(objectKey: string) {
     const url = `${import.meta.env.VITE_MINIO_URL}/${objectKey}`;
     window.open(url, "_blank");

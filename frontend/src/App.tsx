@@ -7,6 +7,7 @@ import Upload from "./pages/Upload/Upload";
 import RunHistory from "./pages/RunHistory/RunHistory";
 import Metrics from "./pages/Metrics/Metrics";
 import Alerts from "./pages/Alerts/Alerts";
+import DatasetsDetails from "./pages/DatasetsDetails/DatasetsDetails";
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
           <Navbar />
           <Routes>
             <Route path="/" element={<Datasets />} />
+            <Route path="/datasets/:id" element={<DatasetsDetails />} />
             <Route path="/upload" element={<Upload />} />
             <Route path="/runs" element={<RunHistory />} />
             <Route path="/metrics" element={<Metrics />} />
