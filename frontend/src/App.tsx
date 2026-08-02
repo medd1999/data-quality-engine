@@ -8,16 +8,18 @@ import RunHistory from "./pages/RunHistory/RunHistory";
 import Metrics from "./pages/Metrics/Metrics";
 import Alerts from "./pages/Alerts/Alerts";
 import DatasetsDetails from "./pages/DatasetsDetails/DatasetsDetails";
+import { useState } from "react";
 
 export default function App() {
+  const [search, setQuery] = useState("");
   return (
     <BrowserRouter>
       <div className="layout">
         <Sidebar />
         <main>
-          <Navbar />
+          <Navbar onSearch={setQuery} />
           <Routes>
-            <Route path="/" element={<Datasets />} />
+            <Route path="/" element={<Datasets search={search} />} />
             <Route path="/datasets/:id" element={<DatasetsDetails />} />
             <Route path="/upload" element={<Upload />} />
             <Route path="/runs" element={<RunHistory />} />
