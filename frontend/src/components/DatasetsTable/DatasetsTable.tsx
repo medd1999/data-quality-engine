@@ -1,4 +1,4 @@
-import DownloadButton from "../DownloadButton/DownloadButton";
+import { Download } from "lucide-react";
 import "./DatasetsTable.css";
 
 interface Dataset {
@@ -10,10 +10,10 @@ interface Dataset {
 }
 
 export default function DatasetsTable({ datasets }: { datasets: Dataset[] }) {
-  function downloadDataset(objectKey: string) {
-    const url = `${import.meta.env.VITE_MINIO_URL}/${objectKey}`;
-    window.open(url, "_blank");
-  }
+  // function downloadDataset(objectKey: string) {
+  //   const url = `${import.meta.env.VITE_MINIO_URL}/${objectKey}`;
+  //   window.open(url, "_blank");
+  // }
 
   return (
     <table className="dataset-table">
@@ -33,11 +33,16 @@ export default function DatasetsTable({ datasets }: { datasets: Dataset[] }) {
             <td>{ds.file_name}</td>
             <td>{new Date(ds.created_at).toLocaleString()}</td>
             <td className="dataset-actions">
-              <DownloadButton objectKey={ds.object_key} />
+              <a href={`${import.meta.env.VITE_MINIO_URL}/${ds.object_key}`}
+                download className="download-link">
+                <Download size={16} />
+                Download
+              </a>
 
               <button onClick={() => window.location.href = `/datasets/${ds.id}`}>
                 Details
               </button>
+              <br />
             </td>
           </tr>
         ))}

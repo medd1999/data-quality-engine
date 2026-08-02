@@ -1,0 +1,11 @@
+.details-card {
+    font-family: 'Inter', 'Times New Roman', Times, serif;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.dataset-actions {
+    display: flex;
+    gap: 12px;
+}

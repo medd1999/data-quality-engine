@@ -12,8 +12,21 @@
     text-align: left;
 }
 
+.download-link {
+    font-family: "Inter", 'Times New Roman', Times, serif;
+    color: #0077ff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.download-link:hover {
+    font-family: "Inter", 'Times New Roman', Times, serif;
+    text-decoration: underline;
+}
+
 .dataset-actions button {
     font-family: "Inter", 'Times New Roman', Times, serif;
+    font-size: 19px;
     margin-right: 12px;
     cursor: pointer;
     background: none;
