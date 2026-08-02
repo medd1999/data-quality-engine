@@ -1,3 +1,4 @@
+import DownloadButton from "../DownloadButton/DownloadButton";
 import "./DatasetsTable.css";
 
 interface Dataset {
@@ -32,9 +33,7 @@ export default function DatasetsTable({ datasets }: { datasets: Dataset[] }) {
             <td>{ds.file_name}</td>
             <td>{new Date(ds.created_at).toLocaleString()}</td>
             <td className="dataset-actions">
-              <button onClick={() => downloadDataset(ds.object_key)}>
-                Download
-              </button>
+              <DownloadButton objectKey={ds.object_key} />
 
               <button onClick={() => window.location.href = `/datasets/${ds.id}`}>
                 Details

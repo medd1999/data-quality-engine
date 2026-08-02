@@ -1,11 +1,7 @@
 import "./DetailsCard.css";
+import DownloadButton from "../DownloadButton/DownloadButton";
 
 export default function DetailsCard({ dataset }) {
-    function downloadDataset() {
-        const url = `${import.meta.env.VITE_MINIO_URL}/${dataset.object_key}`;
-        window.open(url, "_blank");
-    }
-
     return (
         <div className="details-card">
             <div className="details-row">
@@ -29,9 +25,7 @@ export default function DetailsCard({ dataset }) {
             </div>
             <br />
 
-            <button className="details-download" onClick={downloadDataset}>
-                Download File
-            </button>
+            <DownloadButton objectKey={dataset.object_key} label="Download Dataset" />
         </div>
     );
 }

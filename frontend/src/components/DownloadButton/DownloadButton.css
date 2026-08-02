@@ -1,0 +1,15 @@
+.download-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: #f0f0f0;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.download-btn:hover {
+    background: #e5e5e5;
+}
