@@ -5,7 +5,7 @@ import DetailsCard from "../../components/DetailsCard/DetailsCard";
 
 export default function DatasetsDetails() {
     const { id } = useParams();
-    const { datasets, loading } = useDatasets(id!);
+    const { datasets, loading } = useDatasets();
 
     if (loading) {
         return <div className="details-loading">Loading dataset...</div>

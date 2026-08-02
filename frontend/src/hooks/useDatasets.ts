@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 
-export function useDatasets(id: string | number) {
-    const [datasets, setDatasets] = useState(null);
+export function useDatasets() {
+    const [datasets, setDatasets] = useState([]);
     const [loading, setLoading]   = useState(true);
 
     useEffect(() => {
         async function load() {
             try {
-                const res = await fetch(`${import.meta.env.VITE_API_URL}/datasets/${id}`);
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/datasets`);
                 const data = await res.json();
                 setDatasets(data);
             } catch (error) {
@@ -18,7 +18,7 @@ export function useDatasets(id: string | number) {
         }
 
         load();
-    }, [id]);
+    }, []);
 
     return { datasets, loading };
 }
