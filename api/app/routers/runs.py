@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.db import get_db
 from app.models.runs import Run
+from app.models.dataset import Dataset
 
 router = APIRouter(prefix="/runs", tags=["runs"])
 
@@ -20,7 +21,21 @@ def list_runs(db: Session = Depends(get_db)):
 
 @router.get("/{run_id}")
 def get_run(run_id: int, db: Session = Depends(get_db)):
-    run = db.query(Run).filter(Run.id == run_id).first()
-    if not run:
+    result = (
+        db.query(Run, Dataset)
+        .join(Dataset, Run.dataset_id == Dataset.id)
+        .filter(Run.id == run_id)
+        .first()
+    )
+    if not result:
         raise HTTPException(status_code=404, detail="Run not found")
-    return run
+    
+    run, dataset = result
+    return {
+        "id": run.id,
+        "dataset_id": run.dataset_id,
+        "dataset_name": dataset.name,
+        "status": run.status,
+        "created_at": run.created_at,
+        "updated_at": run.updated_at,
+    }
