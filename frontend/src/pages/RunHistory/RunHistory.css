@@ -3,3 +3,9 @@
   font-size: 50px;
   font-weight: 600;
 }
+
+.run-history-loading,
+.run-history-error {
+  font-size: 18px;
+  margin-top: 12px;
+}

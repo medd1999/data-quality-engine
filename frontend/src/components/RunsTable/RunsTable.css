@@ -1,0 +1,36 @@
+.runs-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.runs-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.runs-table th,
+.runs-table td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+}
+
+.runs-table th {
+  background-color: #f4f4f4;
+  text-align: left;
+}
+
+.runs-table .status {
+  font-weight: bold;
+}
+
+.runs-table .status.success {
+  color: green;
+}
+
+.runs-table .status.error {
+  color: red;
+}
+
+.runs-table .status.pending {
+  color: orange;
+}
