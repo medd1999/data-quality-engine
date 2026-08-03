@@ -35,6 +35,7 @@
 .download-link:hover {
     font-family: "Inter", 'Times New Roman', Times, serif;
     text-decoration: underline;
+    color: orange;
 }
 
 .dataset-actions button {
@@ -51,4 +52,5 @@
 .dataset-actions button:hover {
     font-family: "Inter", 'Times New Roman', Times, serif;
     text-decoration: underline;
+    color: orange;
 }

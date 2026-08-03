@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
 export interface Run {
+    dataset_name: string;
     id: string;
     dataset_id: string;
     status: string;

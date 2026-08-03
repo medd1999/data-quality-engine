@@ -23,6 +23,10 @@ export default function RunDetails() {
             <h1 className="run-details-title">Run #{runDetails.id}</h1>
             <div className="run-details-card">
                 <div className="run-details-row">
+                    <span className="label">Dataset Name:</span> 
+                    <span className="value">{runDetails.dataset_name}</span>
+                </div>
+                <div className="run-details-row">
                     <span className="label">Run ID:</span> 
                     <span className="value">{runDetails.id}</span>
                 </div>

@@ -23,7 +23,7 @@
 }
 
 .runs-table-container a:hover {
-  color: #0056b3; /* darker blue on hover */
+  color: orange;
   text-decoration: underline;
 }
 
