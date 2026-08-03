@@ -3,7 +3,7 @@ import { useRuns } from "../../hooks/useRuns";
 import "./RunHistory.css";
 
 export default function Runs() {
-  const { runs, loading, error } = useRuns("");
+  const { runs, loading, error } = useRuns();
 
   if (loading) {
     return <p>Loading runs...</p>;

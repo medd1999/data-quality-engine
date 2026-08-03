@@ -8,7 +8,7 @@ export interface Run {
     updated_at: string | null;
 }
 
-export function useRuns(datasetId: string) {
+export function useRuns() {
     const [runs, setRuns] = useState<Run[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -30,7 +30,7 @@ export function useRuns(datasetId: string) {
         }
 
         fetchRuns();
-    }, [datasetId]);
+    }, []);
 
     return { runs, loading, error };
 }

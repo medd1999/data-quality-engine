@@ -15,7 +15,8 @@
 }
 
 .runs-table th {
-  background-color: #f4f4f4;
+  color: orange;
+  background-color: #040476;
   text-align: left;
 }
 
