@@ -60,14 +60,15 @@ export default function Upload() {
           onChange={(e) => setDatasetName(e.target.value)}
         />
         <br></br><br></br>
-        <label className="upload-label">File (CSV or JSON) </label>
-        <br></br>
-        <input
-          type="file"
-          accept=".csv,.json"
-          onChange={(e) => setFile(e.target.files?.[0] || null)}
-        />
-        
+        <label className="upload-label">File (CSV or JSON)
+          <br></br><br></br>
+          <input
+            type="file"
+            accept=".csv,.json"
+            onChange={(e) => setFile(e.target.files?.[0] || null)}
+          />
+        </label>
+
         <button
           disabled={!file || !datasetName || status === "uploading"}
           onClick={handleUpload}

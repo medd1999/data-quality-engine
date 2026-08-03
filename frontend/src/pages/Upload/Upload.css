@@ -8,3 +8,21 @@
   font-family: "Inter", 'Times New Roman', Times, serif;
   padding: 24px;
 }
+
+.upload-card button {
+  font-family: "Inter", 'Times New Roman', Times, serif;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #0077ff;
+  color: white;
+  border: 1px solid #e2e2e2;
+  border-radius: 12px;
+}
+
+.upload-label input {
+  font-family: "Inter", 'Times New Roman', Times, serif;
+  border: 1px solid #e2e2e2;
+  border-radius: 12px;
+  box-sizing: border-box;
+  margin-right: 100px;
+}
