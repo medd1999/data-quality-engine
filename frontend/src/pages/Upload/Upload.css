@@ -14,10 +14,14 @@
   font-family: "Inter", 'Times New Roman', Times, serif;
   font-size: 16px;
   cursor: pointer;
-  background-color: #0077ff;
+  background-color: #040476;
   color: white;
   border: 1px solid #e2e2e2;
   border-radius: 12px;
+}
+
+.upload-card button:hover {
+  background-color: #03035a;
 }
 
 .upload-label input {

@@ -14,3 +14,21 @@
   padding: 24px;
   font-size: 18px;
 }
+
+.run-button {
+  background-color: #040476; /* Dark Blue */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-top: 20px;
+  cursor: pointer;
+  border-radius: 12px;
+}
+
+.run-button:hover {
+  background-color: #03035a; /* Darker Blue on hover */
+}
