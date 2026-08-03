@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.routers import datasets
+from app.routers import datasets, run
 from app.s3 import S3_BUCKET, ensure_bucket_exists
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -17,3 +17,4 @@ app.add_middleware(
 
 print("INCLUDING ROUTER", flush=True)
 app.include_router(datasets.router)
+app.include_router(run.router)
