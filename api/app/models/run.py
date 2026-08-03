@@ -1,6 +1,6 @@
-from sqlaclehmy import Column, Integer, String, DateTime, ForeignKey, func
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, func
 from sqlalchemy.orm import relationship
-from database import Base
+from db import Base
 
 class Run(Base):
     __tablename__ = "runs"
