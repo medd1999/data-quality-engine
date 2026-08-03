@@ -1,82 +1,41 @@
-from sqlalchemy import text
-from fastapi import APIRouter, UploadFile, Form, HTTPException
-from ..db import SessionLocal
-from ..s3 import s3, S3_BUCKET
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
+from sqlalchemy.orm import Session
+from app.db import get_db
+from app.models.dataset import Dataset
+from app.s3 import s3, S3_BUCKET
 
-router = APIRouter()
+router = APIRouter(prefix="/datasets", tags=["datasets"])
 
+@router.post("/upload")
+async def upload_dataset(
+    dataset_name: str = Form(...),
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db)
+):
+    object_key = f"{dataset_name}/{file.filename}"
+    s3.upload_fileobj(file.file, S3_BUCKET, object_key)
 
-@router.post("/datasets")
-async def upload_dataset(dataset_name: str = Form(...), file: UploadFile = Form(...)):
-    print("UPLOAD ENDPOINT HIT")
-    db = SessionLocal()
+    dataset = Dataset(
+        name=dataset_name,
+        file_name=file.filename,
+        object_key=object_key,
+    )
 
-    # Upload file to S3 (MinIO)
-    try:
-        object_key = f"{dataset_name}/{file.filename}"
-        s3.upload_fileobj(file.file, S3_BUCKET, object_key)
+    db.add(dataset)
+    db.commit()
+    db.refresh(dataset)
 
-        # Insert dataset metadata into Postgres
-        db.execute(
-            text("""
-            INSERT INTO datasets (name, file_name, object_key)
-            VALUES (:name, :file_name, :object_key)
-            """),
-            {
-                "name": dataset_name,
-                "file_name": file.filename,
-                "object_key": object_key,
-            },
-        )
-        db.commit()
-
-        return {
-            "message": "Your dataset has successfully uploaded!",
-            "dataset": dataset_name,
-        }
-
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(status_code=500, detail=str(e))
+    return dataset
 
 
-@router.get("/datasets")
-def list_datasets():
-    db = SessionLocal()
-
-    rows = db.execute(text("""
-        SELECT 
-            name, 
-            id,
-            file_name, 
-            object_key,
-            created_at
-        FROM datasets
-        ORDER BY created_at DESC
-        """)).fetchall()
-
-    return [dict(row._mapping) for row in rows]
+@router.get("/")
+def list_datasets(db: Session = Depends(get_db)):
+    return db.query(Dataset).order_by(Dataset.id.desc()).all()
 
 
-@router.get("/datasets/{dataset_id}")
-def get_dataset(dataset_id: int):
-    db = SessionLocal()
-
-    row = db.execute(
-        text("""
-            SELECT 
-                id,
-                name,
-                file_name,
-                object_key,
-                created_at
-            FROM datasets
-            WHERE id = :id
-        """),
-        {"id": dataset_id},
-    ).fetchone()
-
-    if not row:
+@router.get("/{dataset_id}")
+def get_dataset(dataset_id: int, db: Session = Depends(get_db)):
+    dataset = db.query(Dataset).filter(Dataset.id == dataset_id).first()
+    if not dataset:
         raise HTTPException(status_code=404, detail="Dataset not found")
-
-    return dict(row._mapping)
+    return dataset
