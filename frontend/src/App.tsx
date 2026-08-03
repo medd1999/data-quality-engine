@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Navbar from "./components/Navbar/Navbar";
+import RunDetails from "./components/RunDetails/RunDetails";
 
 import Datasets from "./pages/Datasets/Datasets";
 import Upload from "./pages/Upload/Upload";
@@ -23,6 +24,7 @@ export default function App() {
             <Route path="/datasets/:id" element={<DatasetsDetails />} />
             <Route path="/upload" element={<Upload />} />
             <Route path="/runs" element={<RunHistory />} />
+            <Route path="/runs/:id" element={<RunDetails />} />
             <Route path="/metrics" element={<Metrics />} />
             <Route path="/alerts" element={<Alerts />} />
           </Routes>
