@@ -283,4 +283,5 @@ SentinelDQ is built for engineers who need transparent, automated, and scalable 
 - Postgres √
 - MinIO √
 - E2E Pipeline √
+- Quality Check Trigger √
 
