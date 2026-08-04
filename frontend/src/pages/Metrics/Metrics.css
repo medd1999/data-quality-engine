@@ -1,5 +1,33 @@
+.metrics-page {
+  padding: 24px;
+}
+
 .metrics-title {
   font-family: "Inter", 'Times New Roman', Times, serif;
   font-size: 50px;
   font-weight: 600;
+}
+
+.metrics-card {
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.metrics-card h2 {
+  margin-bottom: 12px;
+}
+
+.distribution-json {
+  background: #f0f0f0;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  overflow-x: auto;
+}
+
+.error-text {
+  color: red;
 }
