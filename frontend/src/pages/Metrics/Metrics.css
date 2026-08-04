@@ -18,6 +18,7 @@
 
 .metrics-card h2 {
   margin-bottom: 12px;
+  color: rgb(100, 100, 100);
 }
 
 .distribution-json {

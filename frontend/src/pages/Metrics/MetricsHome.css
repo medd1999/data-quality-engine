@@ -1,0 +1,112 @@
+.metrics-home {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.metrics-home-title {
+  font-family: 'Inter', 'Times New Roman', Times, serif;
+  font-size: 50px;
+  font-weight: 700;
+  color: #e8e8ef;
+  margin-bottom: 8px;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 28px;
+}
+
+.metrics-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.metrics-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.metrics-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.metrics-card-header h2 {
+  font-size: 20px;
+  margin: 0;
+  color: #1e1e2f;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: #fff;
+}
+
+.status-pending {
+  background: #f0ad4e;
+}
+
+.status-running {
+  background: #0275d8;
+}
+
+.status-completed {
+  background: #5cb85c;
+}
+
+.status-failed {
+  background: #d9534f;
+}
+
+.metrics-card-body {
+  font-size: 14px;
+  line-height: 1.55;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mini-metrics {
+  margin-top: 12px;
+  padding: 12px;
+  background: #f7f7fa;
+  border-radius: 8px;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metrics-card-footer {
+  margin-top: 12px;
+  text-align: right;
+}
+
+.view-metrics-btn {
+  background: #040476;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.view-metrics-btn:hover {
+  background: #b76f0a;
+}

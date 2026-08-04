@@ -6,6 +6,7 @@ from app.models.dataset import Dataset
 
 router = APIRouter(prefix="/runs", tags=["runs"])
 
+
 @router.post("/")
 def start_run(dataset_id: int, db: Session = Depends(get_db)):
     run = Run(dataset_id=dataset_id, status="pending")
@@ -14,10 +15,37 @@ def start_run(dataset_id: int, db: Session = Depends(get_db)):
     db.refresh(run)
     return run
 
+
 @router.get("/")
 def list_runs(db: Session = Depends(get_db)):
     runs = db.query(Run).order_by(Run.created_at.desc()).all()
     return runs
+
+@router.get("/all-metrics")
+def get_all_metrics(db: Session = Depends(get_db)):
+    runs = db.query(Run).all()
+
+    results = []
+    for run in runs:
+        results.append(
+            {
+                "run_id": run.id,
+                "dataset_id": run.dataset_id,
+                "dataset_name": db.query(Dataset).get(run.dataset_id).name,
+                "status": run.status,
+                "created_at": run.created_at,
+                "updated_at": run.updated_at,
+                "metrics": {
+                    "missing_values": {},
+                    "duplicate_rows": 0,
+                    "schema_mismatches": [],
+                    "outliers": {},
+                    "distributions": {},
+                },
+            }
+        )
+
+    return results
 
 @router.get("/{run_id}")
 def get_run(run_id: int, db: Session = Depends(get_db)):
@@ -29,7 +57,7 @@ def get_run(run_id: int, db: Session = Depends(get_db)):
     )
     if not result:
         raise HTTPException(status_code=404, detail="Run not found")
-    
+
     run, dataset = result
     return {
         "id": run.id,
@@ -39,3 +67,19 @@ def get_run(run_id: int, db: Session = Depends(get_db)):
         "created_at": run.created_at,
         "updated_at": run.updated_at,
     }
+
+@router.get("/{run_id}/metrics")
+def get_run_metrics(run_id: int, db: Session = Depends(get_db)):
+    # Placeholder until real engine is built
+    return {
+        "missing_values": {},
+        "duplicate_rows": 0,
+        "schema_mismatches": [],
+        "outliers": {},
+        "distributions": {},
+    }
+
+@router.get("/{run_id}/alerts")
+def get_run_alerts(run_id: int, db: Session = Depends(get_db)):
+    # Placeholder for actual alerts retrieval logic
+    return []

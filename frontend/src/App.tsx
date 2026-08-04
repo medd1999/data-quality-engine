@@ -7,6 +7,7 @@ import Datasets from "./pages/Datasets/Datasets";
 import Upload from "./pages/Upload/Upload";
 import RunHistory from "./pages/RunHistory/RunHistory";
 import Metrics from "./pages/Metrics/Metrics";
+import MetricsHome from "./pages/Metrics/MetricsHome";
 import Alerts from "./pages/Alerts/Alerts";
 import DatasetsDetails from "./pages/DatasetsDetails/DatasetsDetails";
 import { useState } from "react";
@@ -25,8 +26,9 @@ export default function App() {
             <Route path="/upload" element={<Upload />} />
             <Route path="/runs" element={<RunHistory />} />
             <Route path="/runs/:id" element={<RunDetails />} />
-            <Route path="/metrics" element={<Metrics />} />
-            <Route path="/alerts" element={<Alerts />} />
+            <Route path="/runs/:id/metrics" element={<Metrics />} />
+            <Route path="/metrics" element={<MetricsHome />} />
+            <Route path="/runs/:id/alerts" element={<Alerts />} />
           </Routes>
         </main>
       </div>
