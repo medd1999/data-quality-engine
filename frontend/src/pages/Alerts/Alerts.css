@@ -1,18 +1,17 @@
-.alerts-page {
-  padding: 24px;
-}
-
-.alerts-title {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
-/* Summary Chart */
 .alerts-summary {
   display: flex;
   gap: 20px;
+  flex-direction: column;
+  width: 500px;
   margin-bottom: 24px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.alerts-title {
+  font-family: 'Inter', 'Times New Roman', Times, serif;
+  font-weight: bold;
+  font-size: 50px;
 }
 
 .summary-card {
@@ -35,7 +34,6 @@
   color: #555;
 }
 
-/* Severity colors */
 .summary-card.error {
   border-left: 6px solid #dc322f;
 }
@@ -46,69 +44,4 @@
 
 .summary-card.info {
   border-left: 6px solid #268bd2;
-}
-
-/* Table */
-.alerts-table {
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #e2e2e2;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.alerts-header {
-  display: grid;
-  grid-template-columns: 120px 1fr 200px;
-  background: #f5f5f5;
-  padding: 12px;
-  font-weight: 600;
-  border-bottom: 1px solid #ddd;
-}
-
-.alerts-row {
-  display: grid;
-  grid-template-columns: 120px 1fr 200px;
-  padding: 12px;
-  border-bottom: 1px solid #eee;
-  background: #fff;
-}
-
-.alerts-row:last-child {
-  border-bottom: none;
-}
-
-.alert-level {
-  font-weight: 700;
-}
-
-.alert-message {
-  padding-right: 12px;
-}
-
-.alert-date {
-  color: #555;
-}
-
-/* Severity row colors */
-.alerts-row.warning {
-  border-left: 4px solid #b58900;
-}
-
-.alerts-row.error {
-  border-left: 4px solid #dc322f;
-}
-
-.alerts-row.info {
-  border-left: 4px solid #268bd2;
-}
-
-.no-alerts {
-  padding: 16px;
-  text-align: center;
-  color: #777;
-}
-
-.error-text {
-  color: red;
 }

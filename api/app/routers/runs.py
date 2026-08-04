@@ -21,6 +21,7 @@ def list_runs(db: Session = Depends(get_db)):
     runs = db.query(Run).order_by(Run.created_at.desc()).all()
     return runs
 
+
 @router.get("/all-metrics")
 def get_all_metrics(db: Session = Depends(get_db)):
     runs = db.query(Run).all()
@@ -47,6 +48,41 @@ def get_all_metrics(db: Session = Depends(get_db)):
 
     return results
 
+
+@router.get("/all-alerts")
+def get_all_alerts(db: Session = Depends(get_db)):
+    runs = db.query(Run).all()
+
+    results = []
+    for run in runs:
+        results.append(
+            {
+                "run_id": run.id,
+                "dataset_id": run.dataset_id,
+                "dataset_name": db.query(Dataset).get(run.dataset_id).name,
+                "status": run.status,
+                "created_at": run.created_at,
+                "updated_at": run.updated_at,
+                "alerts": [
+                    {
+                        "id": 1,
+                        "severity": "warning",
+                        "message": "Sample warning",
+                        "timestamp": run.updated_at,
+                    },
+                    {
+                        "id": 2,
+                        "severity": "error",
+                        "message": "Sample error",
+                        "timestamp": run.updated_at,
+                    },
+                ],
+            }
+        )
+
+    return results
+
+
 @router.get("/{run_id}")
 def get_run(run_id: int, db: Session = Depends(get_db)):
     result = (
@@ -68,6 +104,7 @@ def get_run(run_id: int, db: Session = Depends(get_db)):
         "updated_at": run.updated_at,
     }
 
+
 @router.get("/{run_id}/metrics")
 def get_run_metrics(run_id: int, db: Session = Depends(get_db)):
     # Placeholder until real engine is built
@@ -79,7 +116,20 @@ def get_run_metrics(run_id: int, db: Session = Depends(get_db)):
         "distributions": {},
     }
 
+
 @router.get("/{run_id}/alerts")
 def get_run_alerts(run_id: int, db: Session = Depends(get_db)):
-    # Placeholder for actual alerts retrieval logic
-    return []
+    return [
+        {
+            "id": 1,
+            "severity": "warning",
+            "message": "Sample warning",
+            "timestamp": "2026-08-03T20:00:00Z",
+        },
+        {
+            "id": 2,
+            "severity": "error",
+            "message": "Sample error",
+            "timestamp": "2026-08-03T20:00:00Z",
+        },
+    ]

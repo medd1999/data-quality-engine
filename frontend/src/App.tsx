@@ -9,6 +9,7 @@ import RunHistory from "./pages/RunHistory/RunHistory";
 import Metrics from "./pages/Metrics/Metrics";
 import MetricsHome from "./pages/Metrics/MetricsHome";
 import Alerts from "./pages/Alerts/Alerts";
+import AlertsHome from "./pages/Alerts/AlertsHome";
 import DatasetsDetails from "./pages/DatasetsDetails/DatasetsDetails";
 import { useState } from "react";
 
@@ -29,6 +30,7 @@ export default function App() {
             <Route path="/runs/:id/metrics" element={<Metrics />} />
             <Route path="/metrics" element={<MetricsHome />} />
             <Route path="/runs/:id/alerts" element={<Alerts />} />
+            <Route path="/alerts" element={<AlertsHome />} />
           </Routes>
         </main>
       </div>

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useAlerts } from "../../hooks/useAlerts";
 
 export default function Alerts() {
-  const { runId } = useParams<{ runId: string }>();
+  const { id: runId } = useParams();
   const { alerts, loading, error } = useAlerts(runId!);
 
   if (loading) {
@@ -14,9 +14,13 @@ export default function Alerts() {
     return <p className="error-text">Uh oh, we've got an error: {error}</p>;
   }
 
-  const errorCount = alerts.filter(alert => alert.severity === "error").length;
-  const warningCount = alerts.filter(alert => alert.severity === "warning").length;
-  const infoCount = alerts.filter(alert => alert.severity === "info").length;
+  if (!alerts.length) {
+    return <p>Hmmm, no alerts are found for this run.</p>
+  }
+
+  const errorCount = alerts.filter(alert => alert.severity?.toLowerCase() === "error").length;
+  const warningCount = alerts.filter(alert => alert.severity?.toLowerCase() === "warning").length;
+  const infoCount = alerts.filter(alert => alert.severity?.toLowerCase() === "info").length;
 
   return (
     <div className="alerts-page">
@@ -46,17 +50,13 @@ export default function Alerts() {
           <span>Timestamp</span>
         </div>
 
-        {alerts.length === 0 ? (
-          <p className="no-alerts">No alerts found for this run.</p>
-        ) : (
-          alerts.map(alert => (
-            <div key={alert.id} className={`alert-item ${alert.severity}`}>
-              <span className="alert-message">{alert.message}</span>
-              <span className="alert-severity">{alert.severity.toUpperCase()}</span>
-              <span className="alert-timestamp">{new Date(alert.timestamp).toLocaleString()}</span>
-            </div>
-          ))
-        )}
+        {alerts.map(alert => (
+          <div key={alert.id ?? `${alert.severity}-${alert.timestamp}`} className={`alerts-row ${alert.severity}`}>
+            <span className="alert-severity">{(alert.severity ?? "unknown").toUpperCase()}</span>
+            <span className="alert-message">{alert.message ?? "No message"}</span>
+            <span className="alert-timestamp">{alert.timestamp ? new Date(alert.timestamp).toLocaleString() : "Unknown"}</span>
+          </div>
+        ))}
       </div>
     </div>
   );

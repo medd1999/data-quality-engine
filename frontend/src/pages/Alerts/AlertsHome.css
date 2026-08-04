@@ -1,0 +1,64 @@
+.alerts-home {
+  padding: 32px;
+}
+
+.alerts-home-title {
+  font-family: 'Inter', 'Times New Roman', Times, serif;
+  font-size: 50px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.alerts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 28px;
+}
+
+.alerts-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.alerts-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.alerts-card h2 {
+  color: #3b3b45;
+}
+
+.alert-preview {
+  margin-top: 12px;
+  background: #f7f7fa;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.alert-line {
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.alert-line.warning { color: #b58900; }
+.alert-line.error { color: #dc322f; }
+.alert-line.info { color: #268bd2; }
+
+.view-alerts-btn {
+  background: #040476;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.view-alerts-btn:hover {
+  background: #b76f0a;
+}
