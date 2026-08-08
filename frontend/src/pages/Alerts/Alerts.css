@@ -14,6 +14,24 @@
   font-size: 50px;
 }
 
+.alerts-table {
+  font-family: 'Inter', 'Times New Roman', Times, serif;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.alerts-table th,
+.alerts-table td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+}
+
+.alerts-table th {
+  color: orange;
+  background-color: #040476;
+}
+
 .summary-card {
   flex: 1;
   padding: 16px;

@@ -43,21 +43,24 @@ export default function Alerts() {
         </div>
       </div>
 
-      <div className="alerts-table">
-        <div className="alerts-header">
-          <span>Severity</span>
-          <span>Message</span>
-          <span>Timestamp</span>
-        </div>
-
-        {alerts.map(alert => (
-          <div key={alert.id ?? `${alert.severity}-${alert.timestamp}`} className={`alerts-row ${alert.severity}`}>
-            <span className="alert-severity">{(alert.severity ?? "unknown").toUpperCase()}</span>
-            <span className="alert-message">{alert.message ?? "No message"}</span>
-            <span className="alert-timestamp">{alert.timestamp ? new Date(alert.timestamp).toLocaleString() : "Unknown"}</span>
-          </div>
-        ))}
-      </div>
+      <table className="alerts-table">
+        <thead>
+          <tr>
+            <th>Severity</th>
+            <th>Message</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          {alerts.map(alert => (
+            <tr key={alert.id ?? `${alert.severity}-${alert.timestamp}`} className={`alerts-row ${alert.severity}`}>
+              <td className="alert-severity">{(alert.severity ?? "unknown").toUpperCase()}</td>
+              <td className="alert-message">{alert.message ?? "No message"}</td>
+              <td className="alert-timestamp">{alert.timestamp ? new Date(alert.timestamp).toLocaleString() : "Unknown"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

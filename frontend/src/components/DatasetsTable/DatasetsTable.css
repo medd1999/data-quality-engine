@@ -1,3 +1,8 @@
+.dataset-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
 .dataset-table {
     font-family: "Inter", 'Times New Roman', Times, serif;
     width: 100%;
@@ -20,9 +25,14 @@
 .dataset-table th,
 .dataset-table td {
     font-family: "Inter", 'Times New Roman', Times, serif;
-    padding: 12px;
-    border-bottom: 1px solid #e2e2e2;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
     text-align: left;
+}
+
+.dataset-table th {
+  color: orange;
+  background-color: #040476;
 }
 
 .download-link {

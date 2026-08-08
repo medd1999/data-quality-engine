@@ -1,10 +1,11 @@
 .details-page {
   padding: 24px;
+  color: black;
 }
 
 .details-title {
   font-family: 'Inter', 'Times New Roman', Times, serif;
-  font-size: 35px;
+  font-size: 50px;
   font-weight: 600;
   margin-bottom: 20px;
 }

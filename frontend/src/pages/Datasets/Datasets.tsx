@@ -16,7 +16,7 @@ export default function Datasets({ search }: { search: string }) {
 
   return (
     <div className="datasets-page">
-      <h1 className="datasets-title">Datasets</h1>
+      <h1 className="datasets-title">Datasets Dashboard</h1>
 
       <DatasetsTable datasets={filteredDatasets} />
     </div>
