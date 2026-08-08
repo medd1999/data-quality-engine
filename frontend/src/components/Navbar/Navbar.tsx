@@ -1,4 +1,4 @@
-import { Sun, Moon, User, Search } from "lucide-react";
+import { Sun, User, Search } from "lucide-react";
 import "./Navbar.css";
 
 export default function Navbar({onSearch}: {onSearch: (query: string) => void}) {
