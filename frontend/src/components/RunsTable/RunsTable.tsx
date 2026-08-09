@@ -7,6 +7,18 @@ interface RunsTableProps {
 }
 
 export default function RunsTable({ runs }: RunsTableProps) {
+
+    function formatDate(dateString: string) {
+        const d = new Date(dateString);
+        const month = d.getMonth() + 1;
+        const day = d.getDate();
+        const year = d.getFullYear();
+        const hours = d.getHours();
+        const minutes = d.getMinutes().toString().padStart(2, "0");
+
+        return `${month}/${day}/${year} at ${hours}:${minutes}`;
+    }
+
     return (
         <div className="runs-table-container">
             <table className="runs-table">
@@ -26,13 +38,13 @@ export default function RunsTable({ runs }: RunsTableProps) {
                             <td>{run.id}</td>
                             <td>{run.dataset_id}</td>
                             <td className={`status ${run.status}`}>{run.status}</td>
-                            <td>{new Date(run.created_at).toLocaleString()}</td>
+                            <td>{formatDate(run.created_at)}</td>
                             <td>{run.updated_at ? new Date(run.updated_at).toLocaleString() : "N/A"}</td>
                             <td><Link to={`/runs/${run.id}`}>View Details</Link></td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-            </div>
+        </div>
     );
 }

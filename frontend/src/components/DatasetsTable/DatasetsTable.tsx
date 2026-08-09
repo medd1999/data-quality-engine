@@ -10,6 +10,18 @@ interface Dataset {
 }
 
 export default function DatasetsTable({ datasets }: { datasets: Dataset[] }) {
+
+  function formatDate(dateString: string) {
+    const d = new Date(dateString);
+    const month = d.getMonth() + 1;
+    const day = d.getDate();
+    const year = d.getFullYear();
+    const hours = d.getHours();
+    const minutes = d.getMinutes().toString().padStart(2, "0");
+
+    return `${month}/${day}/${year} at ${hours}:${minutes}`;
+  }
+
   return (
     <div className="dataset-table-container">
       <table className="dataset-table">
@@ -27,7 +39,7 @@ export default function DatasetsTable({ datasets }: { datasets: Dataset[] }) {
             <tr key={ds.id}>
               <td>{ds.name}</td>
               <td>{ds.file_name}</td>
-              <td>{new Date(ds.created_at).toLocaleString()}</td>
+              <td>{formatDate(ds.created_at)}</td>
               <td className="dataset-actions">
                 <a href={`${import.meta.env.VITE_MINIO_URL}/${ds.object_key}`}
                   download className="download-link">

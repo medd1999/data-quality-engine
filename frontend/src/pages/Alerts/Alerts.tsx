@@ -18,6 +18,17 @@ export default function Alerts() {
     return <p>Hmmm, no alerts are found for this run.</p>
   }
 
+  function formatDate(dateString: string) {
+    const d = new Date(dateString);
+    const month = d.getMonth() + 1;
+    const day = d.getDate();
+    const year = d.getFullYear();
+    const hours = d.getHours();
+    const minutes = d.getMinutes().toString().padStart(2, "0");
+
+    return `${month}/${day}/${year} at ${hours}:${minutes}`;
+  }
+
   const errorCount = alerts.filter(alert => alert.severity?.toLowerCase() === "error").length;
   const warningCount = alerts.filter(alert => alert.severity?.toLowerCase() === "warning").length;
   const infoCount = alerts.filter(alert => alert.severity?.toLowerCase() === "info").length;
@@ -56,7 +67,7 @@ export default function Alerts() {
             <tr key={alert.id ?? `${alert.severity}-${alert.timestamp}`} className={`alerts-row ${alert.severity}`}>
               <td className="alert-severity">{(alert.severity ?? "unknown").toUpperCase()}</td>
               <td className="alert-message">{alert.message ?? "No message"}</td>
-              <td className="alert-timestamp">{alert.timestamp ? new Date(alert.timestamp).toLocaleString() : "Unknown"}</td>
+              <td className="alert-timestamp">{alert.timestamp ? formatDate(alert.timestamp) : "Unknown"}</td>
             </tr>
           ))}
         </tbody>
