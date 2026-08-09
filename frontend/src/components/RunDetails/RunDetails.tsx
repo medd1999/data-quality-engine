@@ -23,10 +23,13 @@ export default function RunDetails() {
         const month = d.getMonth() + 1;
         const day = d.getDate();
         const year = d.getFullYear();
-        const hours = d.getHours();
+        let hours = d.getHours();
         const minutes = d.getMinutes().toString().padStart(2, "0");
 
-        return `${month}/${day}/${year} at ${hours}:${minutes}`;
+        const ampm = hours >= 12 ? "PM" : "AM";
+        hours = hours % 12 || 12;
+
+        return `${month}/${day}/${year} at ${hours}:${minutes} ${ampm}`;
     }
 
     return (
