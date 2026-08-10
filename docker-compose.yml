@@ -20,8 +20,8 @@ services:
     networks:
       - sentineldq-net
 
-  spark-engine:
-    # build: ./spark-engine
+  spark_engine:
+    # build: ./spark_engine
     container_name: sentineldq_spark
     image: apache/spark:3.5.1
     environment:
@@ -34,19 +34,19 @@ services:
       - db
       - minio
     volumes:
-      - ./spark-engine:/app
+      - ./spark_engine:/app
     networks:
       - sentineldq-net
 
-  alerting-service:
-    build: ./alerting-service
+  alerting_service:
+    build: ./alerting_service
     container_name: sentineldq_alerts
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/sentineldq
     depends_on:
       - db
     volumes:
-      - ./alerting-service:/app
+      - ./alerting_service:/app
     networks:
       - sentineldq-net
 

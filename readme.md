@@ -229,9 +229,9 @@ SentinelDQ is built for engineers who need transparent, automated, and scalable 
 
 - `api` (FastAPI)
 
-- `spark-engine` (PySpark)
+- `spark_engine` (PySpark)
 
-- `alerting-service` (Python)
+- `alerting_service` (Python)
 
 - `db` (Postgres)
 

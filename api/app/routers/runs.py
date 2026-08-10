@@ -3,6 +3,8 @@ from sqlalchemy.orm import Session
 from app.db import get_db
 from app.models.runs import Run
 from app.models.dataset import Dataset
+from spark_engine.engine_runner import run_engine
+import asyncio
 
 router = APIRouter(prefix="/runs", tags=["runs"])
 
@@ -82,6 +84,16 @@ def get_all_alerts(db: Session = Depends(get_db)):
 
     return results
 
+@router.post("/start")
+async def start_run(dataset_id: int, db=Depends(get_db)):
+    run = Run(dataset_id=dataset_id, status="pending")
+    db.add(run)
+    db.commit()
+    db.refresh(run)
+    
+    asyncio.create_task(run_engine(run.id, dataset_id))
+    
+    return run
 
 @router.get("/{run_id}")
 def get_run(run_id: int, db: Session = Depends(get_db)):
