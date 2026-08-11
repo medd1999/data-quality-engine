@@ -6,6 +6,12 @@ from api.app.s3 import s3, S3_BUCKET
 
 router = APIRouter(prefix="/datasets", tags=["datasets"])
 
+
+@router.options("/upload")
+def options_upload():
+    return {}
+
+
 @router.post("/upload")
 async def upload_dataset(
     dataset_name: str = Form(...),

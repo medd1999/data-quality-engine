@@ -16,7 +16,7 @@ export function useRuns() {
     useEffect(() => {
         async function fetchRuns() {
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/runs`);
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/runs/`);
                 if (!response.ok) {
                     throw new Error("Failed to fetch runs");
                 }

@@ -9,3 +9,4 @@ httpx
 asyncio
 pyspark
 typing_extensions
+pandas

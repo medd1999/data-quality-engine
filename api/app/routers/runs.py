@@ -1,27 +1,45 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from api.app.db import get_db
 from api.app.models.runs import Run
 from api.app.models.dataset import Dataset
+from api.app.s3 import s3, S3_BUCKET
 from spark_engine.engine_runner import run_engine
+import pandas as pd
 import asyncio
 
 router = APIRouter(prefix="/runs", tags=["runs"])
 
 
-@router.post("/")
-def start_run(dataset_id: int, db: Session = Depends(get_db)):
+@router.post("")
+async def create_run(dataset_id: int = Query(...), db: Session = Depends(get_db)):
+    # Validate dataset exists
+    dataset = db.query(Dataset).get(dataset_id)
+    if not dataset:
+        raise HTTPException(status_code=404, detail="Dataset not found")
+
+    # Create run
     run = Run(dataset_id=dataset_id, status="pending")
     db.add(run)
     db.commit()
     db.refresh(run)
+    
+    # Load file from S3
+    try:
+        obj = s3.get_object(Bucket=S3_BUCKET, Key=dataset.object_key)
+        df = pd.read_csv(obj["Body"])
+    except Exception as e:
+        print("S3 READ ERROR:", e)
+        raise HTTPException(status_code=500, detail=f"Failure to load dataset from S3: {e}")
+    # Kick off async engine
+    asyncio.create_task(run_engine(run.id, dataset_id, df))
+    
     return run
 
 
-@router.get("/")
+@router.get("")
 def list_runs(db: Session = Depends(get_db)):
-    runs = db.query(Run).order_by(Run.created_at.desc()).all()
-    return runs
+    return db.query(Run).order_by(Run.created_at.desc()).all()
 
 
 @router.get("/all-metrics")
@@ -84,16 +102,6 @@ def get_all_alerts(db: Session = Depends(get_db)):
 
     return results
 
-@router.post("/start")
-async def start_run(dataset_id: int, db=Depends(get_db)):
-    run = Run(dataset_id=dataset_id, status="pending")
-    db.add(run)
-    db.commit()
-    db.refresh(run)
-    
-    asyncio.create_task(run_engine(run.id, dataset_id))
-    
-    return run
 
 @router.get("/{run_id}")
 def get_run(run_id: int, db: Session = Depends(get_db)):
@@ -103,10 +111,12 @@ def get_run(run_id: int, db: Session = Depends(get_db)):
         .filter(Run.id == run_id)
         .first()
     )
+
     if not result:
         raise HTTPException(status_code=404, detail="Run not found")
 
     run, dataset = result
+
     return {
         "id": run.id,
         "dataset_id": run.dataset_id,
@@ -119,7 +129,6 @@ def get_run(run_id: int, db: Session = Depends(get_db)):
 
 @router.get("/{run_id}/metrics")
 def get_run_metrics(run_id: int, db: Session = Depends(get_db)):
-    # Placeholder until real engine is built
     return {
         "missing_values": {},
         "duplicate_rows": 0,

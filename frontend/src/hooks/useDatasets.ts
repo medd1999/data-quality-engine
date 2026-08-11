@@ -7,7 +7,7 @@ export function useDatasets() {
     useEffect(() => {
         async function load() {
             try {
-                const res = await fetch(`${import.meta.env.VITE_API_URL}/datasets`);
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/datasets/`);
                 const data = await res.json();
                 setDatasets(data);
             } catch (error) {

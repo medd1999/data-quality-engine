@@ -10,6 +10,7 @@ from api.app.db import Base, engine
 print("MAIN.PY STARTING", flush=True)
 
 app = FastAPI()
+ensure_bucket_exists()
 
 app.add_middleware(
     CORSMiddleware,

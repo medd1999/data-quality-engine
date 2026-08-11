@@ -9,7 +9,7 @@ export default function DatasetsDetails() {
 
     async function handleRunQualityCheck() {
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/runs/?dataset_id=${id}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/runs?dataset_id=${id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

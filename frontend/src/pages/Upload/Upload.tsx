@@ -15,10 +15,10 @@ export default function Upload() {
     formData.append("file", file);
     formData.append("dataset_name", datasetName);
 
-    console.log("CALLING:", `${import.meta.env.VITE_API_URL}/datasets`);
+    console.log("CALLING:", `${import.meta.env.VITE_API_URL}/datasets/upload`);
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/datasets`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/datasets/upload`, {
         method: "POST",
         body: formData,
       });
