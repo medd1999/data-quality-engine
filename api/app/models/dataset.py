@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, DateTime, func
 from sqlalchemy.orm import relationship
-from app.db import Base
+from api.app.db import Base
 
 class Dataset(Base):
     __tablename__ = "datasets"

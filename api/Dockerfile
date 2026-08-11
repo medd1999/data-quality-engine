@@ -2,13 +2,14 @@ FROM python:3.10
 
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+COPY api/requirements.txt requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY api api
+
+COPY spark_engine spark_engine
+
 
 EXPOSE 8000
 
 RUN ls -R /app
-
-CMD ["python", "-u", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

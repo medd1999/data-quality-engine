@@ -1,9 +1,10 @@
 services:
   api:
     build:
-      context: ./api
-      dockerfile: Dockerfile
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+      context: .
+      dockerfile: api/Dockerfile
+    entrypoint: []
+    command: uvicorn api.app.main:app --host 0.0.0.0 --port 8000
     ports:
       - "8000:8000"
     environment:
@@ -15,13 +16,10 @@ services:
     depends_on:
       - db
       - minio
-    # volumes:
-    #   - ./api:/app
     networks:
       - sentineldq-net
 
   spark_engine:
-    # build: ./spark_engine
     container_name: sentineldq_spark
     image: apache/spark:3.5.1
     environment:
@@ -34,7 +32,7 @@ services:
       - db
       - minio
     volumes:
-      - ./spark_engine:/app
+      - ./spark_engine:/spark_engine
     networks:
       - sentineldq-net
 
@@ -46,7 +44,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ./alerting_service:/app
+      - ./alerting_service:/alerting_service
     networks:
       - sentineldq-net
 
@@ -56,8 +54,8 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./frontend/src:/app/src
-      - ./frontend/public:/app/public
+      - ./frontend/src:/frontend/src
+      - ./frontend/public:/frontend/public
     networks:
       - sentineldq-net
 

@@ -279,9 +279,13 @@ SentinelDQ is built for engineers who need transparent, automated, and scalable 
 # Checklist
 
 - Backend/FastAPI √
+- Dashboard UI √
 - Docker/Compose √
 - Postgres √
 - MinIO √
 - E2E Pipeline √
 - Quality Check Trigger √
 
+# Troubleshoots
+
+- `ModuleNotFoundError: No module named <module_name>` - add module to requirements.txt

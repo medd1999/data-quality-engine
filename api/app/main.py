@@ -1,11 +1,11 @@
 from fastapi import FastAPI
-from app.routers.datasets import router as datasets_router
-from app.routers.runs import router as runs_router
-from app.models.dataset import Dataset
-from app.models.runs import Run
-from app.s3 import S3_BUCKET, ensure_bucket_exists
+from api.app.routers.datasets import router as datasets_router
+from api.app.routers.runs import router as runs_router
+from api.app.models.dataset import Dataset
+from api.app.models.runs import Run
+from api.app.s3 import S3_BUCKET, ensure_bucket_exists
 from fastapi.middleware.cors import CORSMiddleware
-from app.db import Base, engine
+from api.app.db import Base, engine
 
 print("MAIN.PY STARTING", flush=True)
 

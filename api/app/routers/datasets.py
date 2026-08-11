@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from sqlalchemy.orm import Session
-from app.db import get_db
-from app.models.dataset import Dataset
-from app.s3 import s3, S3_BUCKET
+from api.app.db import get_db
+from api.app.models.dataset import Dataset
+from api.app.s3 import s3, S3_BUCKET
 
 router = APIRouter(prefix="/datasets", tags=["datasets"])
 
