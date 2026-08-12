@@ -1,10 +1,15 @@
 import { useRunDetails } from "../../hooks/useRunDetails";
+import { useRunLogs } from "../../hooks/useRunLogs";
+import { useRunProgress } from "../../hooks/useRunProgress";
 import "./RunDetails.css";
 import { useParams, Link } from "react-router-dom";
+
 
 export default function RunDetails() {
     const { id } = useParams();
     const { runDetails, loading, error } = useRunDetails(id!);
+    const { logs } = useRunLogs(id!);
+    const { progress } = useRunProgress(id!);
 
     if (loading) {
         return <p>Loading up the run details...</p>;
@@ -15,7 +20,7 @@ export default function RunDetails() {
     }
 
     if (!runDetails) {
-        return <p>Uhhh...there's no run to be found.</p>;
+        return <p>Hmmm...there's no run to be found.</p>;
     }
 
     function formatDate(dateString: string) {
@@ -60,6 +65,24 @@ export default function RunDetails() {
                     <span className="label">Updated At:</span>
                     <span className="value">{runDetails.updated_at ? new Date(runDetails.updated_at).toLocaleString() : "N/A"}</span>
                 </div>
+            </div>
+
+            <div className="run-logs-card">
+                <h2>Live Logs</h2>
+                <div className="logs-container">
+                    {logs.length === 0 && <p>No logs yet...</p>}
+                    {logs.map((line, i) => (
+                        <div key={i} className="log-line">{line}</div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="progress-card">
+                <h2>Progress</h2>
+                <div className="progress-bar">
+                    <div className="progress-fill" style={{ width: `${progress}%` }}/>
+                </div>
+                <p>{progress}%</p>
             </div>
             <Link to="/runs" className="back-link">Back to Run History</Link>
         </div>

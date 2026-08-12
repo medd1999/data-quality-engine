@@ -1,9 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, APIRouter
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from api.app.db import get_db
 from api.app.models.runs import Run
 from api.app.models.dataset import Dataset
 from api.app.s3 import s3, S3_BUCKET
+from api.app.run_queue import get_run_queue
 from spark_engine.engine_runner import run_engine
 import pandas as pd
 import asyncio
@@ -101,6 +103,18 @@ def get_all_alerts(db: Session = Depends(get_db)):
         )
 
     return results
+
+
+@router.get("/stream/{run_id}")
+async def stream_run_logs(run_id: int):
+    async def event_generator():
+        queue = get_run_queue(run_id)
+            
+        while True:
+            message = await queue.get()
+            yield f"data response: {message}\n\n"
+                
+    return StreamingResponse(event_generator(), media_type="text/event-stream")
 
 
 @router.get("/{run_id}")
