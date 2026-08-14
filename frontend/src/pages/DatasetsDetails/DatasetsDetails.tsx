@@ -1,11 +1,13 @@
 import "./DatasetsDetails.css";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSingleDataset } from "../../hooks/useSingleDataset";
 import DetailsCard from "../../components/DetailsCard/DetailsCard";
 
 export default function DatasetsDetails() {
     const { id } = useParams();
     const { dataset, loading } = useSingleDataset(id!);
+    const navigate = useNavigate();
 
     async function handleRunQualityCheck() {
         try {
@@ -20,6 +22,7 @@ export default function DatasetsDetails() {
             const data = await response.json();
             console.log("Commencing Quality Check:", data);
             alert("Quality check initiated successfully!");
+            navigate(`/runs/${data.id}`);
         } catch (error) {
             console.error("Error commencing quality check:", error);
             alert("Error commencing quality check. Please try again.");
