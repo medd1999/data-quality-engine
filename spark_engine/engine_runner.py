@@ -23,6 +23,8 @@ def result_normalization(results):
         results = results.to_dict()
         
     if not isinstance(results, dict):
+        if hasattr(results, "item"):
+            return {"value": results.item()}
         return {"value": results}
     
     normalized = {}
@@ -77,6 +79,7 @@ async def run_engine(run_id: int, dataset_id: int, df):
         alerts = []
         
         await queue.put({"type": "metric", metric_name: data_results})
+            
         await queue.put({"type": "progress", "value": progress_value})
         await asyncio.sleep(2.0)
         
