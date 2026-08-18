@@ -87,13 +87,22 @@ export default function RunDetails() {
                     {phase_animate.map((p) => {
                         const isActive = phase === p;
 
+                        const icons: Record<string, string> = {
+                            starting: "🚀",
+                            loading_dataset: "📥",
+                            schema_validation: "📊",
+                            missing_values: "❓",
+                            duplicate_rows: "📑",
+                            outliers: "📈",
+                            completed: "✅"
+                        };
+
                         return (
                             <div
                                 key={p}
-                                className={`phase-step 
-                                    ${isActive ? "active" : ""} 
-                                `}
+                                className={`phase-step ${isActive ? "active" : ""}`}
                             >
+                                <span className="phase-icon">{icons[p]}</span>
                                 {p}
                             </div>
                         );

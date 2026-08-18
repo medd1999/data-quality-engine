@@ -223,6 +223,9 @@
   border-radius: 6px;
   background: #ecf0f1;
   text-transform: capitalize;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 @keyframes pulse {
@@ -256,4 +259,9 @@
 .phase-dot.active {
     background: #2ecc71;
     animation: pulse 1.5s infinite;
+}
+
+.phase-icon {
+  font-size: 16px;
+  display: inline-block;
 }
