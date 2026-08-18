@@ -8,7 +8,7 @@ from api.app.s3 import s3, S3_BUCKET
 from api.app.run_queue import get_run_queue
 from spark_engine.engine_runner import run_engine
 import pandas as pd
-import asyncio
+import asyncio, json
 
 router = APIRouter(prefix="/runs", tags=["runs"])
 
@@ -109,10 +109,22 @@ def get_all_alerts(db: Session = Depends(get_db)):
 async def stream_run_logs(run_id: int):
     async def event_generator():
         queue = get_run_queue(run_id)
-            
-        while True:
-            message = await queue.get()
-            yield f"data response: {message}\n\n"
+        
+        if queue is None:
+            yield f"data: {json.dumps({'type': 'error', 'message': 'Queue not found'})}\n\n"
+            await asyncio.sleep(0)
+            return
+        try:    
+            while True:
+                message = await queue.get()
+                payload = json.dumps(message)
+                yield f"data: {payload}\n\n"
+                await asyncio.sleep(0)
+                
+        except Exception as e:
+            err = json.dumps({"type": "error", "message": str(e)})
+            yield f"data: {err}\n\n"
+            await asyncio.sleep(0)
                 
     return StreamingResponse(event_generator(), media_type="text/event-stream")
 

@@ -27,6 +27,67 @@
   border-bottom: 1px solid #ddd;
 }
 
+.phase-card {
+    margin-top: 20px;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.phase-card h2 {
+  color: #040476;
+}
+.phase-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.phase-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: gray;
+}
+
+.phase-dot.starting { background: #3498db; }
+.phase-dot.loading_dataset { background: #9b59b6; }
+.phase-dot.schema_validation { background: #e67e22; }
+.phase-dot.missing_values { background: #f1c40f; }
+.phase-dot.duplicate_rows { background: #e74c3c; }
+.phase-dot.outliers { background: #d35400; }
+.phase-dot.completed { background: #2ecc71; }
+
+.phase-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.phase-timeline {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.phase-step {
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #ecf0f1;
+    font-size: 0.9rem;
+    text-transform: capitalize;
+    opacity: 0.5;
+}
+
+.phase-step.active {
+    background: #2ecc71;
+    color: white;
+    opacity: 1;
+    font-weight: 600;
+}
+
 .run-details-row:last-child {
   border-bottom: none;
 }
@@ -35,16 +96,71 @@
   font-weight: 600;
 }
 
+.run-logs-card h2 {
+  color: orange;
+}
 .logs-container {
-  color: #ec6b09;
+    max-height: 350px;
+    overflow-y: auto;
+    background: #1e1e1e;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    font-family: "Consolas", "Courier New", monospace;
+    color: #e0e0e0;
+}
+
+.log-entry {
+    display: flex;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px solid #333;
+}
+
+.log-entry:last-child {
+    border-bottom: none;
+}
+
+.log-timestamp {
+    color: #8ab4f8;
+    font-size: 0.85rem;
+    min-width: 80px;
+}
+
+.log-text {
+    color: #e0e0e0;
+    flex: 1;
+}
+
+/* Optional: color-code logs based on keywords */
+.log-text:contains("error"),
+.log-text:contains("Error"),
+.log-text:contains("ERROR") {
+    color: #ff6b6b;
+}
+
+.log-text:contains("warning"),
+.log-text:contains("Warning"),
+.log-text:contains("WARNING") {
+    color: #f1c40f;
+}
+
+.log-text:contains("loading"),
+.log-text:contains("Loading") {
+    color: #9b59b6;
 }
 
 .progress-card {
+  color: #040476;
   margin-top: 24px;
   padding: 20px;
   border: 1px solid #e2e2e2;
   border-radius: 8px;
   background: #fafafa;
+}
+
+.progress-card h2 {
+  color: #040476;
 }
 
 .progress-bar {
@@ -59,7 +175,7 @@
 .progress-fill {
   height: 100%;
   background: #4caf50;
-  transition: width 0.3s ease;
+  transition: width 0.4s ease-in-out;
 }
 
 .status.pending {

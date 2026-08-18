@@ -1,6 +1,5 @@
 import { useRunDetails } from "../../hooks/useRunDetails";
-import { useRunLogs } from "../../hooks/useRunLogs";
-import { useRunProgress } from "../../hooks/useRunProgress";
+import { useRunStream } from "../../hooks/useRunStream";
 import "./RunDetails.css";
 import { useParams, Link } from "react-router-dom";
 
@@ -8,8 +7,7 @@ import { useParams, Link } from "react-router-dom";
 export default function RunDetails() {
     const { id } = useParams();
     const { runDetails, loading, error } = useRunDetails(id!);
-    const { logs } = useRunLogs(id!);
-    const { progress } = useRunProgress(id!);
+    const { logs, progress, phase } = useRunStream(id!);
 
     if (loading) {
         return <p>Loading up the run details...</p>;
@@ -67,12 +65,41 @@ export default function RunDetails() {
                 </div>
             </div>
 
+            <div className="phase-card">
+                <h2>Phase</h2>
+                <div className="phase-indicator">
+                    <div className={`phase-dot ${phase}`}></div>
+                    <span className="phase-text">{phase}</span>
+                </div>
+                <div className="phase-timeline">
+                    {[
+                        "starting",
+                        "loading_dataset",
+                        "schema_validation",
+                        "missing_values",
+                        "duplicate_rows",
+                        "outliers",
+                        "completed"
+                    ].map((p) => (
+                        <div key={p} className={`phase-step ${phase === p ? "active" : ""}`}>
+                            {p}
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <br></br>
             <div className="run-logs-card">
                 <h2>Live Logs</h2>
                 <div className="logs-container">
                     {logs.length === 0 && <p>No logs yet...</p>}
+
                     {logs.map((line, i) => (
-                        <div key={i} className="log-line">{line}</div>
+                        <div key={i} className="log-entry">
+                            <span className="log-timestamp">
+                                {new Date().toLocaleTimeString()}
+                            </span>
+                            <span className="log-text">{line}</span>
+                        </div>
                     ))}
                 </div>
             </div>
@@ -80,7 +107,7 @@ export default function RunDetails() {
             <div className="progress-card">
                 <h2>Progress</h2>
                 <div className="progress-bar">
-                    <div className="progress-fill" style={{ width: `${progress}%` }}/>
+                    <div className="progress-fill" style={{ width: `${progress}%` }} />
                 </div>
                 <p>{progress}%</p>
             </div>

@@ -10,3 +10,4 @@ asyncio
 pyspark
 typing_extensions
 pandas
+numpy
