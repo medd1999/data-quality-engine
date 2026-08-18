@@ -62,11 +62,11 @@ async def run_engine(run_id: int, dataset_id: int, df):
             lambda df: df.duplicated().sum(), 60,
             "Now I'm looking for any duplicates..."
         ),
-        # (
-        #     "outliers",
-        #     lambda df: check_outliers(df), 80,
-        #     "Now I'm checking the numeric columns for any outliers..."
-        # )
+        (
+            "outliers",
+            lambda df: check_outliers(df), 80,
+            "Now I'm checking the numeric columns for any outliers..."
+        )
     ]
     
     for metric_name, fn, progress_value, log_message in checks:
