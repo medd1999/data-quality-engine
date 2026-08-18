@@ -208,3 +208,52 @@
 .error-text {
   color: red;
 }
+
+.phase-text {
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.phase-step {
+  opacity: 0.4;
+  transform: translateX(-6px);
+  transition: all 0.3s ease;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #ecf0f1;
+  text-transform: capitalize;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(46,204,113,0.6); }
+  70% { box-shadow: 0 0 0 10px rgba(46,204,113,0); }
+  100% { box-shadow: 0 0 0 0 rgba(46,204,113,0); }
+}
+.phase-step.active {
+  opacity: 1;
+  transform: translateX(0);
+  background: #2ecc71;
+  color: white;
+  animation: pulse 1.5s infinite;
+  font-weight: 500;
+}
+
+.phase-step.completed {
+  opacity: 1;
+  background: #2ecc71;
+  color: #333;
+}
+
+.phase-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: gray;
+    transition: all 0.3s ease;
+}
+
+.phase-dot.active {
+    background: #2ecc71;
+    animation: pulse 1.5s infinite;
+}

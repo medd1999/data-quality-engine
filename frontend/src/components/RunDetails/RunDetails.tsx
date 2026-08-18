@@ -9,6 +9,16 @@ export default function RunDetails() {
     const { runDetails, loading, error } = useRunDetails(id!);
     const { logs, progress, phase } = useRunStream(id!);
 
+    const phase_animate = [
+        "starting",
+        "loading_dataset",
+        "schema_validation",
+        "missing_values",
+        "duplicate_rows",
+        "outliers",
+        "completed"
+    ];
+
     if (loading) {
         return <p>Loading up the run details...</p>;
     }
@@ -67,24 +77,27 @@ export default function RunDetails() {
 
             <div className="phase-card">
                 <h2>Phase</h2>
+
                 <div className="phase-indicator">
-                    <div className={`phase-dot ${phase}`}></div>
+                    <div className={`phase-dot ${phase ? "active" : ""}`}></div>
                     <span className="phase-text">{phase}</span>
                 </div>
+
                 <div className="phase-timeline">
-                    {[
-                        "starting",
-                        "loading_dataset",
-                        "schema_validation",
-                        "missing_values",
-                        "duplicate_rows",
-                        "outliers",
-                        "completed"
-                    ].map((p) => (
-                        <div key={p} className={`phase-step ${phase === p ? "active" : ""}`}>
-                            {p}
-                        </div>
-                    ))}
+                    {phase_animate.map((p) => {
+                        const isActive = phase === p;
+
+                        return (
+                            <div
+                                key={p}
+                                className={`phase-step 
+                                    ${isActive ? "active" : ""} 
+                                `}
+                            >
+                                {p}
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
             <br></br>
