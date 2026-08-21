@@ -127,7 +127,7 @@ export default function RunDetails() {
             </div>
 
             <div className="progress-card">
-                <h2>Progress</h2>
+                <h2>Progress Meter</h2>
                 <div className="progress-bar">
                     <div className="progress-fill" style={{ width: `${progress}%` }} />
                 </div>
