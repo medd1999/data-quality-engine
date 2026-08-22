@@ -62,12 +62,12 @@ async def run_engine(run_id: int, dataset_id: int, df):
         (
             "duplicate_rows",
             lambda df: df.duplicated().sum(), 60,
-            "Now I'm looking for any duplicates..."
+            "Looking for any duplicates..."
         ),
         (
             "outliers",
             lambda df: check_outliers(df), 80,
-            "Now I'm checking the numeric columns for any outliers..."
+            "Scanning for any outliers..."
         )
     ]
     
