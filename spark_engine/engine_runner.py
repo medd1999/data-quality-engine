@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from api.shared.alert_schema import Alert, AlertPayload
+from shared.alert_schema import Alert, AlertPayload
 from spark_engine.alert_sender import send_alerts
 from spark_engine.checks.schema_validation import check_schema
 from spark_engine.checks.outliers import check_outliers

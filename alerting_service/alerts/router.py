@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from api.shared.alert_schema import AlertPayload
+from shared.alert_schema import AlertPayload
 
 router = APIRouter()
 

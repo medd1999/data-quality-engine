@@ -20,6 +20,9 @@ services:
       - sentineldq-net
 
   spark_engine:
+    build:
+      context: .
+      dockerfile: spark_engine/Dockerfile
     container_name: sentineldq_spark
     image: apache/spark:3.5.1
     environment:
@@ -37,7 +40,9 @@ services:
       - sentineldq-net
 
   alerting_service:
-    build: ./alerting_service
+    build:
+      context: .
+      dockerfile: alerting_service/Dockerfile
     container_name: sentineldq_alerts
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/sentineldq

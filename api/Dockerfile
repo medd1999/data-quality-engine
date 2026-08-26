@@ -9,6 +9,10 @@ COPY api api
 
 COPY spark_engine spark_engine
 
+COPY alerting_service alerting_service
+
+COPY ../shared ./shared
+
 
 EXPOSE 8000
 
