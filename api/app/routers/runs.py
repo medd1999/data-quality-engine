@@ -7,6 +7,7 @@ from api.app.models.dataset import Dataset
 from api.app.s3 import s3, S3_BUCKET
 from api.app.run_queue import get_run_queue
 from spark_engine.engine_runner import run_engine
+from shared.serializers import serialize_datetime, serialize_alert, serialize_dataset, serialize_run
 import pandas as pd
 import asyncio, json
 
@@ -36,12 +37,13 @@ async def create_run(dataset_id: int = Query(...), db: Session = Depends(get_db)
     # Kick off async engine
     asyncio.create_task(run_engine(run.id, dataset_id, df))
     
-    return run
+    return serialize_run(run)
 
 
 @router.get("")
 def list_runs(db: Session = Depends(get_db)):
-    return db.query(Run).order_by(Run.created_at.desc()).all()
+    runs = db.query(Run).order_by(Run.created_at.desc()).all()
+    return [serialize_run(run) for run in runs]
 
 
 @router.get("/all-metrics")
@@ -50,14 +52,11 @@ def get_all_metrics(db: Session = Depends(get_db)):
 
     results = []
     for run in runs:
+        dataset = db.query(Dataset).get(run.dataset_id)
         results.append(
             {
-                "run_id": run.id,
-                "dataset_id": run.dataset_id,
-                "dataset_name": db.query(Dataset).get(run.dataset_id).name,
-                "status": run.status,
-                "created_at": run.created_at,
-                "updated_at": run.updated_at,
+                **serialize_run(run),
+                "dataset_name": dataset.name,
                 "metrics": {
                     "missing_values": {},
                     "duplicate_rows": 0,
@@ -77,26 +76,23 @@ def get_all_alerts(db: Session = Depends(get_db)):
 
     results = []
     for run in runs:
+        dataset = db.query(Dataset).get(run.dataset_id)
         results.append(
             {
-                "run_id": run.id,
-                "dataset_id": run.dataset_id,
-                "dataset_name": db.query(Dataset).get(run.dataset_id).name,
-                "status": run.status,
-                "created_at": run.created_at,
-                "updated_at": run.updated_at,
+                **serialize_run(run),
+                "dataset_name": dataset.name,
                 "alerts": [
                     {
                         "id": 1,
                         "severity": "warning",
                         "message": "Sample warning",
-                        "timestamp": run.updated_at,
+                        "timestamp": serialize_datetime(run.updated_at),
                     },
                     {
                         "id": 2,
                         "severity": "error",
                         "message": "Sample error",
-                        "timestamp": run.updated_at,
+                        "timestamp": serialize_datetime(run.updated_at),
                     },
                 ],
             }
@@ -112,19 +108,16 @@ async def stream_run_logs(run_id: int):
         
         if queue is None:
             yield f"data: {json.dumps({'type': 'error', 'message': 'Queue not found'})}\n\n"
-            await asyncio.sleep(0)
             return
         try:    
             while True:
                 message = await queue.get()
                 payload = json.dumps(message)
                 yield f"data: {payload}\n\n"
-                await asyncio.sleep(0)
                 
         except Exception as e:
             err = json.dumps({"type": "error", "message": str(e)})
             yield f"data: {err}\n\n"
-            await asyncio.sleep(0)
                 
     return StreamingResponse(event_generator(), media_type="text/event-stream")
 
@@ -144,12 +137,8 @@ def get_run(run_id: int, db: Session = Depends(get_db)):
     run, dataset = result
 
     return {
-        "id": run.id,
-        "dataset_id": run.dataset_id,
+        **serialize_run(run),
         "dataset_name": dataset.name,
-        "status": run.status,
-        "created_at": run.created_at,
-        "updated_at": run.updated_at,
     }
 
 
