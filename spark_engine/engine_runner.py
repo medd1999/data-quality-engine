@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from pydantic import BaseModel
 from shared.alert_schema import Alert, AlertPayload
 from spark_engine.alert_sender import send_alerts
 from spark_engine.checks.schema_validation import check_schema
@@ -18,6 +19,10 @@ expected_schema = {
 def sanitize(obj):
     if isinstance(obj, datetime):
         return obj.isoformat()
+    if isinstance(obj, BaseModel):
+        return sanitize(obj.model_dump())
+    if hasattr(obj, "__dict__"):
+        return sanitize(vars(obj))
     if isinstance(obj, dict):
         return {k: sanitize(v) for k, v in obj.items()}
     if isinstance(obj, list):
@@ -249,7 +254,7 @@ async def run_engine(run_id: int, dataset_id: int, df):
         if alerts:
             await queue.put(sanitize({"type": "alert", "alerts": alerts}))
             all_alerts.extend(alerts)
-
+            
     await queue.put(sanitize({"type": "log", "message": "Schema validation finished!"}))
 
     payload = AlertPayload(
@@ -257,9 +262,9 @@ async def run_engine(run_id: int, dataset_id: int, df):
         dataset_id=dataset_id, 
         alerts=all_alerts
     )
-    print("SENDING FINAL ALERT PAYLOAD")
 
-    await send_alerts(sanitize(payload))
+    send_alerts(sanitize(payload))
+    print("FINAL PAYLOAD: ", sanitize(payload))
 
     await queue.put(sanitize({"type": "phase", "value": "completed"}))
     await queue.put(sanitize({"type": "log", "message": "The run is now complete!"}))
