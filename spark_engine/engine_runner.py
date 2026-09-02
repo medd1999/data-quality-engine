@@ -263,7 +263,7 @@ async def run_engine(run_id: int, dataset_id: int, df):
         alerts=all_alerts
     )
 
-    send_alerts(sanitize(payload))
+    await send_alerts(sanitize(payload))
     print("FINAL PAYLOAD: ", sanitize(payload))
 
     await queue.put(sanitize({"type": "phase", "value": "completed"}))

@@ -1,7 +1,7 @@
 import httpx
 from shared.alert_schema import AlertPayload
 
-ALERTING_URL = "http://localhost:8002/api/alerts/ingest"
+ALERTING_URL = "http://alerting_service:8002/api/alerts/ingest"
 ENGINE_TOKEN = "super-secret-engine-token"
 
 async def send_alerts(payload: AlertPayload):

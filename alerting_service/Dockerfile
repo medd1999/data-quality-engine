@@ -3,16 +3,16 @@ FROM python:3.10-slim
 # Put shared in a safe global location
 WORKDIR /app
 
-RUN pip install fastapi uvicorn[standard] pydantic
+RUN pip install fastapi uvicorn[standard] pydantic httpx
 
 # Copy shared package OUTSIDE the mounted directory
-COPY shared /app/shared
+COPY shared ./shared
 
 # Copy alerting_service code into its own directory
-COPY alerting_service /alerting_service
+COPY alerting_service ./alerting_service
 
-# Add /app/shared to PYTHONPATH
-ENV PYTHONPATH="/app:${PYTHONPATH}"
+# EXPOSE the port that FastAPI will run on
+EXPOSE 8002
 
-# Run your service
-CMD ["python", "/alerting_service/main.py"]
+# Run the FastAPI app using uvicorn
+CMD ["uvicorn", "alerting_service.main:app", "--host", "0.0.0.0", "--port", "8002"]

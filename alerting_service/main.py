@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from alerts.router import router as alerts_router
+from alerting_service.alerts.router import router as alerts_router
 
 app = FastAPI()
 
