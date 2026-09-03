@@ -55,6 +55,7 @@ def get_all_metrics(db: Session = Depends(get_db)):
         dataset = db.query(Dataset).get(run.dataset_id)
         results.append(
             {
+                "run_id": run.id,
                 **serialize_run(run),
                 "dataset_name": dataset.name,
                 "metrics": {
@@ -79,6 +80,7 @@ def get_all_alerts(db: Session = Depends(get_db)):
         dataset = db.query(Dataset).get(run.dataset_id)
         results.append(
             {
+                "run_id": run.id,
                 **serialize_run(run),
                 "dataset_name": dataset.name,
                 "alerts": [
