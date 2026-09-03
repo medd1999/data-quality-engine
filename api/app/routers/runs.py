@@ -8,6 +8,7 @@ from api.app.s3 import s3, S3_BUCKET
 from api.app.run_queue import get_run_queue
 from spark_engine.engine_runner import run_engine
 from shared.serializers import serialize_datetime, serialize_alert, serialize_dataset, serialize_run
+from api.app.state import runs_metrics, runs_alerts
 import pandas as pd
 import asyncio, json
 
@@ -53,18 +54,21 @@ def get_all_metrics(db: Session = Depends(get_db)):
     results = []
     for run in runs:
         dataset = db.query(Dataset).get(run.dataset_id)
+        
+        metrics = runs_metrics.get(run.id, {
+                "missing_values": {},
+                "duplicate_rows": 0,
+                "schema_mismatches": [],
+                "outliers": {},
+                "distributions": {},
+            }
+        )
         results.append(
             {
                 "run_id": run.id,
                 **serialize_run(run),
                 "dataset_name": dataset.name,
-                "metrics": {
-                    "missing_values": {},
-                    "duplicate_rows": 0,
-                    "schema_mismatches": [],
-                    "outliers": {},
-                    "distributions": {},
-                },
+                "metrics": metrics,
             }
         )
 
@@ -78,25 +82,15 @@ def get_all_alerts(db: Session = Depends(get_db)):
     results = []
     for run in runs:
         dataset = db.query(Dataset).get(run.dataset_id)
+        
+        alerts = runs_alerts.get(run.id, [])
+        
         results.append(
             {
                 "run_id": run.id,
                 **serialize_run(run),
                 "dataset_name": dataset.name,
-                "alerts": [
-                    {
-                        "id": 1,
-                        "severity": "warning",
-                        "message": "Sample warning",
-                        "timestamp": serialize_datetime(run.updated_at),
-                    },
-                    {
-                        "id": 2,
-                        "severity": "error",
-                        "message": "Sample error",
-                        "timestamp": serialize_datetime(run.updated_at),
-                    },
-                ],
+                "alerts": alerts,
             }
         )
 
@@ -146,28 +140,34 @@ def get_run(run_id: int, db: Session = Depends(get_db)):
 
 @router.get("/{run_id}/metrics")
 def get_run_metrics(run_id: int, db: Session = Depends(get_db)):
-    return {
-        "missing_values": {},
-        "duplicate_rows": 0,
-        "schema_mismatches": [],
-        "outliers": {},
-        "distributions": {},
-    }
+    return runs_metrics.get(
+        run_id,
+        {
+            "schema_validation": {
+                "summary": {
+                    "missing_values": 0,
+                    "unexpected_values": 0,
+                    "type_mismatches": 0,
+                    "nullability_violations": 0,
+                },
+                "by_column": {},
+            },
+            "missing_values": {
+                "summary": {"total_missing": 0},
+                "by_column": {},
+            },
+            "duplicate_rows": {
+                "summary": {"duplicate_rows": 0},
+                "by_column": {},
+            },
+            "outliers": {
+                "summary": {"total_outliers": 0},
+                "by_column": {},
+            },
+        }
+    )
 
 
 @router.get("/{run_id}/alerts")
 def get_run_alerts(run_id: int, db: Session = Depends(get_db)):
-    return [
-        {
-            "id": 1,
-            "severity": "warning",
-            "message": "Sample warning",
-            "timestamp": "2026-08-03T20:00:00Z",
-        },
-        {
-            "id": 2,
-            "severity": "error",
-            "message": "Sample error",
-            "timestamp": "2026-08-03T20:00:00Z",
-        },
-    ]
+    return runs_alerts.get(run_id, [])

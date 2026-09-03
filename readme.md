@@ -289,3 +289,12 @@ SentinelDQ is built for engineers who need transparent, automated, and scalable 
 # Troubleshoots
 
 - `ModuleNotFoundError: No module named <module_name>` - add module to requirements.txt
+
+## Target spark_engine
+ - `target spark_engine: failed to solve: failed to commit <snapshot> to tl0io9pgafwdv0dvc3x928sqs (name will vary) during finalize: failed to stat active key during commit: snapshot <snapshot> does not exist: not found` - built layer disappeared from cache, snapshot no longer exists
+ - Fix: from project root/ run `docker builder prune` - reset build cache
+ - "Are you sure? [y/N] enter `y`
+ - `docker rmi <image-tag-name> - remove image tag for spark engine
+ - `docker compose down --rmi all --volumes --remove-orphans` - delete local images
+ - `docker compose build --no-cache` - clean rebuild
+ - `docker compose up` - start backend

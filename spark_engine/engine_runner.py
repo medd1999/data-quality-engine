@@ -5,6 +5,7 @@ from spark_engine.alert_sender import send_alerts
 from spark_engine.checks.schema_validation import check_schema
 from spark_engine.checks.outliers import check_outliers
 from api.app.run_queue import get_run_queue
+from api.app.state import runs_metrics, runs_alerts
 import pandas as pd
 import numpy as np
 import asyncio
@@ -144,6 +145,11 @@ async def run_engine(run_id: int, dataset_id: int, df):
         alerts = []
 
         await queue.put(sanitize({"type": "metric", "metric": metric}))
+        
+        if run_id not in runs_metrics:
+            runs_metrics[run_id] = {}
+            
+        runs_metrics[run_id][metric_name] = metric
 
         await queue.put(sanitize({"type": "progress", "value": progress_value}))
         await asyncio.sleep(2.0)
@@ -262,6 +268,8 @@ async def run_engine(run_id: int, dataset_id: int, df):
         dataset_id=dataset_id, 
         alerts=all_alerts
     )
+    
+    runs_alerts[run_id] = all_alerts
 
     await send_alerts(sanitize(payload))
     print("FINAL PAYLOAD: ", sanitize(payload))

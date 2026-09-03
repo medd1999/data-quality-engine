@@ -18,7 +18,13 @@
 
 .metrics-card h2 {
   margin-bottom: 12px;
-  color: rgb(100, 100, 100);
+  color: #040478;
+}
+
+.metrics-card ul, p {
+  list-style-type: none;
+  padding-left: 0;
+  color: black;
 }
 
 .distribution-json {
