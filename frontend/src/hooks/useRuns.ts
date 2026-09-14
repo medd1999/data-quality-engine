@@ -30,6 +30,8 @@ export function useRuns() {
         }
 
         fetchRuns();
+        const interval = setInterval(fetchRuns, 5000);
+        return () => clearInterval(interval);
     }, []);
 
     return { runs, loading, error };

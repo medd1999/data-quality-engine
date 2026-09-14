@@ -102,7 +102,7 @@ def result_normalization(metric_name: str, results):
 
 async def run_engine(run_id: int, dataset_id: int, df):
     queue = get_run_queue(run_id)
-
+    
     await queue.put(sanitize({"type": "phase", "value": "started"}))
     await queue.put(sanitize({"type": "status", "message": "Your engine is live!"}))
     await queue.put(sanitize({"type": "progress", "value": 10}))

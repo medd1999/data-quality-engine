@@ -98,16 +98,26 @@ def get_all_alerts(db: Session = Depends(get_db)):
 
 
 @router.get("/stream/{run_id}")
-async def stream_run_logs(run_id: int):
+async def stream_run_logs(run_id: int, db: Session = Depends(get_db)):
     async def event_generator():
         queue = get_run_queue(run_id)
+        valid_status = {"pending", "running", "completed", "failed"}
         
         if queue is None:
             yield f"data: {json.dumps({'type': 'error', 'message': 'Queue not found'})}\n\n"
             return
+        
+        run = db.query(Run).get(run_id)
         try:    
             while True:
                 message = await queue.get()
+                
+                if message.get("type") == "status":
+                    status_value = message.get("message")
+                    if status_value in valid_status:
+                        run.status = status_value
+                        db.commit()
+                
                 payload = json.dumps(message)
                 yield f"data: {payload}\n\n"
                 
