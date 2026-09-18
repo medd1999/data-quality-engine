@@ -285,6 +285,7 @@ SentinelDQ is built for engineers who need transparent, automated, and scalable 
 - MinIO √
 - E2E Pipeline √
 - Quality Check Trigger √
+- Alerting Service √
 
 # Troubleshoots
 
