@@ -1,5 +1,9 @@
 from datetime import datetime, timezone
+import queue
 from pydantic import BaseModel
+from api.app import db
+from api.app.db import get_db
+from api.app.models.runs import Run
 from shared.alert_schema import Alert, AlertPayload
 from spark_engine.alert_sender import send_alerts
 from spark_engine.checks.schema_validation import check_schema
@@ -99,9 +103,22 @@ def result_normalization(metric_name: str, results):
         "by_column": {},
     }
 
+def update_run_status(db, run_id, status):
+    run = db.query(Run).get(run_id)
+    run.status = status
+    db.commit()
+    
 
 async def run_engine(run_id: int, dataset_id: int, df):
     queue = get_run_queue(run_id)
+    db = next(get_db())
+    
+    update_run_status(db, run_id, "running")
+    queue.put_nowait(sanitize({"type": "status", "message": "running"}))
+
+    run = db.query(Run).get(run_id)
+    run.started_at = datetime.now(timezone.utc)
+    db.commit()
     
     await queue.put(sanitize({"type": "phase", "value": "started"}))
     await queue.put(sanitize({"type": "status", "message": "Your engine is live!"}))
@@ -137,129 +154,147 @@ async def run_engine(run_id: int, dataset_id: int, df):
     all_alerts = []
 
     for metric_name, fn, progress_value, log_message in checks:
-        await queue.put(sanitize({"type": "phase", "value": metric_name}))
-        await queue.put(sanitize({"type": "log", "message": log_message}))
+        try:
+            await queue.put(sanitize({"type": "phase", "value": metric_name}))
+            await queue.put(sanitize({"type": "log", "message": log_message}))
 
-        results = fn(df)
-        metric = result_normalization(metric_name, results)
-        alerts = []
+            results = fn(df)
+            metric = result_normalization(metric_name, results)
+            alerts = []
 
-        await queue.put(sanitize({"type": "metric", "metric": metric}))
-        
-        if run_id not in runs_metrics:
-            runs_metrics[run_id] = {}
+            await queue.put(sanitize({"type": "metric", "metric": metric}))
             
-        runs_metrics[run_id][metric_name] = metric
+            if run_id not in runs_metrics:
+                runs_metrics[run_id] = {}
+                
+            runs_metrics[run_id][metric_name] = metric
 
-        await queue.put(sanitize({"type": "progress", "value": progress_value}))
-        await asyncio.sleep(2.0)
+            await queue.put(sanitize({"type": "progress", "value": progress_value}))
+            await asyncio.sleep(2.0)
 
-        if metric_name == "schema_validation":
-            summary = metric["summary"]
-            missing_values = summary["missing_values"]
-            unexpected_values = summary["unexpected_values"]
-            type_mismatches = summary["type_mismatches"]
-            nullability_violations = summary["nullability_violations"]
+            if metric_name == "schema_validation":
+                summary = metric["summary"]
+                missing_values = summary["missing_values"]
+                unexpected_values = summary["unexpected_values"]
+                type_mismatches = summary["type_mismatches"]
+                nullability_violations = summary["nullability_violations"]
 
-            if missing_values > 0:
-                alerts.append(
-                    {
-                        "severity": "error",
-                        "code": "MISSING_VALUES",
-                        "column": None,
-                        "value": missing_values,
-                        "message": f"Wait a minute, this dataset is missing some data",
-                        "timestamp": datetime.now(timezone.utc).isoformat(),
-                    }
-                )
-
-            if unexpected_values > 0:
-                alerts.append(
-                    {
-                        "severity": "warning",
-                        "code": "UNEXPECTED_VALUES",
-                        "column": None,
-                        "value": unexpected_values,
-                        "message": f"Interesting, I wasn't expecting this",
-                        "timestamp": datetime.now(timezone.utc).isoformat(),
-                    }
-                )
-
-            if type_mismatches > 0:
-                alerts.append(
-                    {
-                        "severity": "error",
-                        "code": "TYPE_MISMATCHES",
-                        "column": None,
-                        "value": type_mismatches,
-                        "message": f"Wait a second, there's type mismatches",
-                        "timestamp": datetime.now(timezone.utc).isoformat(),
-                    }
-                )
-
-            if nullability_violations > 0:
-                alerts.append(
-                    {
-                        "severity": "error",
-                        "code": "NULLABILITY_VIOLATIONS",
-                        "column": None,
-                        "value": nullability_violations,
-                        "message": f"There's a column (or columns) you might wanna check out",
-                        "timestamp": datetime.now(timezone.utc).isoformat(),
-                    }
-                )
-
-        if metric_name == "missing_values":
-            by_col = metric["by_column"]
-            for col, count in by_col.items():
-                if count > 0:
-                    required = expected_schema.get(col, {}).get("required", False)
+                if missing_values > 0:
                     alerts.append(
                         {
-                            "severity": "error" if required else "warning",
+                            "severity": "error",
                             "code": "MISSING_VALUES",
-                            "column": col,
-                            "value": count,
-                            "message": (
-                                f"Hold on, column '{col}' has {count} missing values!"
-                                + (" (required column)" if required else "")
-                            ),
+                            "column": None,
+                            "value": missing_values,
+                            "message": f"Wait a minute, this dataset is missing some data",
                             "timestamp": datetime.now(timezone.utc).isoformat(),
                         }
                     )
 
-        if metric_name == "duplicate_rows":
-            dup_count = metric["summary"]["duplicate_rows"]
-            if dup_count > 0:
-                alerts.append(
-                    {
-                        "severity": "warning",
-                        "code": "DUPLICATE_ROWS",
-                        "column": None,
-                        "value": dup_count,
-                        "message": f"Just a heads up, this dataset has {dup_count} duplicate rows.",
-                        "timestamp": datetime.now(timezone.utc).isoformat(),
-                    }
-                )
-
-        if metric_name == "outliers":
-            by_col = metric["by_column"]
-            for col, count in by_col.items():
-                if count > 0:
+                if unexpected_values > 0:
                     alerts.append(
                         {
                             "severity": "warning",
-                            "code": "OUTLIERS_DETECTED",
-                            "column": col,
-                            "value": count,
-                            "message": f"Just a heads up, my Z-score method detected {count} outlier(s) inside {col}.",
+                            "code": "UNEXPECTED_VALUES",
+                            "column": None,
+                            "value": unexpected_values,
+                            "message": f"Interesting, I wasn't expecting this",
                             "timestamp": datetime.now(timezone.utc).isoformat(),
                         }
                     )
 
-        if alerts:
-            await queue.put(sanitize({"type": "alert", "alerts": alerts}))
-            all_alerts.extend(alerts)
+                if type_mismatches > 0:
+                    alerts.append(
+                        {
+                            "severity": "error",
+                            "code": "TYPE_MISMATCHES",
+                            "column": None,
+                            "value": type_mismatches,
+                            "message": f"Wait a second, there's type mismatches",
+                            "timestamp": datetime.now(timezone.utc).isoformat(),
+                        }
+                    )
+
+                if nullability_violations > 0:
+                    alerts.append(
+                        {
+                            "severity": "error",
+                            "code": "NULLABILITY_VIOLATIONS",
+                            "column": None,
+                            "value": nullability_violations,
+                            "message": f"There's a column (or columns) you might wanna check out",
+                            "timestamp": datetime.now(timezone.utc).isoformat(),
+                        }
+                    )
+
+            if metric_name == "missing_values":
+                run.current_phase = metric_name
+                run.phase_started_at = datetime.now(timezone.utc)
+                db.commit()
+
+                by_col = metric["by_column"]
+                for col, count in by_col.items():
+                    if count > 0:
+                        required = expected_schema.get(col, {}).get("required", False)
+                        alerts.append(
+                            {
+                                "severity": "error" if required else "warning",
+                                "code": "MISSING_VALUES",
+                                "column": col,
+                                "value": count,
+                                "message": (
+                                    f"Hold on, column '{col}' has {count} missing values!"
+                                    + (" (required column)" if required else "")
+                                ),
+                                "timestamp": datetime.now(timezone.utc).isoformat(),
+                            }
+                        )
+
+            if metric_name == "duplicate_rows":
+                run.current_phase = metric_name
+                run.phase_started_at = datetime.now(timezone.utc)
+                db.commit()
+
+                dup_count = metric["summary"]["duplicate_rows"]
+                if dup_count > 0:
+                    alerts.append(
+                        {
+                            "severity": "warning",
+                            "code": "DUPLICATE_ROWS",
+                            "column": None,
+                            "value": dup_count,
+                            "message": f"Just a heads up, this dataset has {dup_count} duplicate rows.",
+                            "timestamp": datetime.now(timezone.utc).isoformat(),
+                        }
+                    )
+
+            if metric_name == "outliers":
+                run.current_phase = metric_name
+                run.phase_started_at = datetime.now(timezone.utc)
+                db.commit()
+
+                by_col = metric["by_column"]
+                for col, count in by_col.items():
+                    if count > 0:
+                        alerts.append(
+                            {
+                                "severity": "warning",
+                                "code": "OUTLIERS_DETECTED",
+                                "column": col,
+                                "value": count,
+                                "message": f"Just a heads up, my Z-score method detected {count} outlier(s) inside {col}.",
+                                "timestamp": datetime.now(timezone.utc).isoformat(),
+                            }
+                        )
+
+            if alerts:
+                await queue.put(sanitize({"type": "alert", "alerts": alerts}))
+                all_alerts.extend(alerts)
+            
+        except Exception as e:
+            update_run_status(db, run_id, "failed")
+            await queue.put(sanitize({"type": "status", "message": f"Engine failed during '{metric_name}': {str(e)}"}))
+            return
             
     await queue.put(sanitize({"type": "log", "message": "Schema validation finished!"}))
 
@@ -274,6 +309,10 @@ async def run_engine(run_id: int, dataset_id: int, df):
     await send_alerts(sanitize(payload))
     print("FINAL PAYLOAD: ", sanitize(payload))
 
+    update_run_status(db, run_id, "completed")
+    run.completed_at = datetime.now(timezone.utc)
+    db.commit()
+    
     await queue.put(sanitize({"type": "phase", "value": "completed"}))
     await queue.put(sanitize({"type": "log", "message": "The run is now complete!"}))
     await queue.put(sanitize({"type": "progress", "value": 100}))
